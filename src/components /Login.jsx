@@ -13,8 +13,12 @@ const Login = () => {
 
     try {
       const response = await login({ email, password }).unwrap();
+     
       console.log('Login successful:', response);
-      
+      localStorage.setItem('token', response.token);  
+      localStorage.setItem('user', JSON.stringify(response.user_info));  
+
+     
     } catch (error) {
       console.error('Login failed:', error);
     }
