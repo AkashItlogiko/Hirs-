@@ -14,6 +14,7 @@ const Login = () => {
     try {
       const response = await login({ email, password }).unwrap();
       console.log('Login successful:', response);
+      
     } catch (error) {
       console.error('Login failed:', error);
     }
