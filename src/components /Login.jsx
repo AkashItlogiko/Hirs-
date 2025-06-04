@@ -25,7 +25,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="text-white h-[100vh] flex items-center justify-center bg-cover" style={{background:"url('../src/assets/react.jpg')"}}>
       <div className="bg-slate-800 border border-slate-600 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-30 relative">
         <h1 className="text-4xl font-bold text-center mb-6">Login</h1>
         <form onSubmit={handleSubmit}>

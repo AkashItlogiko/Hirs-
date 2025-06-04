@@ -1,13 +1,18 @@
 
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './components /Login';
 
+import Mainlayout from './Dashboard/Mainlayout';
 
 function App() {
   return (
-    <div className="text-white h-[100vh] flex items-center justify-center bg-cover" style={{background:"url('../src/assets/react.jpg')"}}>
-       <Login/>
-     
-    </div>
+   <BrowserRouter>
+    <Routes>
+      <Route path="login" element={<Login />} />
+      <Route path="/" element={<Mainlayout />} />
+    </Routes>
+
+   </BrowserRouter>
  
   );
 }
