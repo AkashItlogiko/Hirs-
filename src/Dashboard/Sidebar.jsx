@@ -1,5 +1,6 @@
 import { IoMdLogOut } from "react-icons/io";
-import { MdAdminPanelSettings,MdGroups2, } from "react-icons/md";
+import { MdGroups2 } from "react-icons/md";
+import { MdAdminPanelSettings } from "react-icons/md";
 import { IoHandRightSharp } from "react-icons/io5";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
  
@@ -44,7 +45,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
             </li>
             <li className='sidebar-list-item'>
                 <Link to="/">
-                    <FaMoneyCheckDollar  className='icon'/> salary
+                    <FaMoneyCheckDollar  className='icon'/> Salary
                 </Link>
             </li>
             
