@@ -1,5 +1,8 @@
-import React from 'react'
-import { MdAdminPanelSettings } from "react-icons/md";
+import { IoMdLogOut } from "react-icons/io";
+import { MdAdminPanelSettings,MdGroups2, } from "react-icons/md";
+import { IoHandRightSharp } from "react-icons/io5";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
+ 
 import 
 { BsGrid1X2Fill, BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, 
   BsListCheck, BsMenuButtonWideFill, BsFillGearFill}
@@ -11,6 +14,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
     <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive": ""}>
         <div className='sidebar-title'>
             <div className='sidebar-brand'>
+                
                 <MdAdminPanelSettings  className='icon_header'/> HRIS
             </div>
             <span className='icon close_icon' onClick={OpenSidebar}>X</span>
@@ -23,35 +27,27 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                 </Link>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
-                    <BsFillArchiveFill className='icon'/> Products
-                </a>
+                <Link>
+                    
+                    <MdGroups2 className='icon'/> All Employees
+                </Link>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
-                    <BsFillGrid3X3GapFill className='icon'/> Categories
-                </a>
+                <Link to="/">
+                    <IoHandRightSharp className='icon'/> Attendance
+                </Link>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
-                    <BsPeopleFill className='icon'/> Customers
-                </a>
+                <Link to="/">
+                    <IoMdLogOut className='icon'/> Absence
+                </Link>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
-                    <BsListCheck className='icon'/> Inventory
-                </a>
+                <Link to="/">
+                    <FaMoneyCheckDollar  className='icon'/> salary
+                </Link>
             </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsMenuButtonWideFill className='icon'/> Reports
-                </a>
-            </li>
-            <li className='sidebar-list-item'>
-                <a href="">
-                    <BsFillGearFill className='icon'/> Setting
-                </a>
-            </li>
+            
         </ul>
     </aside>
   )

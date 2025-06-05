@@ -3,11 +3,11 @@ import
  {BsPersonCircle, BsSearch, BsJustify}
  from 'react-icons/bs'
 
-const Header = () => {
+const Header = (OpenSidebar) => {
     return (
         <header className='header'>
            <div className='menu-icon'>
-                <BsJustify className='icon' />
+                <BsJustify className='icon' onClick={OpenSidebar} />
            </div>
            <div className='herder-left'>
                <BsSearch className='icon' />
