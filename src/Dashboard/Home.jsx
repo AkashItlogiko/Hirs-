@@ -2,14 +2,7 @@
  import { IoHandRightSharp } from "react-icons/io5";
  import { IoMdLogOut } from "react-icons/io";
  import { FaMoneyCheckDollar } from "react-icons/fa6";
- 
- 
-
 function Home() {
-
-    
-     
-
   return (
     <main className='main-container'>
         <div className='main-title'>
