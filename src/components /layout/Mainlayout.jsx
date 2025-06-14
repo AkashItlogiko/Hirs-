@@ -14,7 +14,7 @@ const Mainlayout = () => {
     return (
         <div className='grid-container'>
         <Header OpenSidebar={OpenSidebar}/>
-        <Outlet/>
+        <Outlet className="w-full" />
         <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
         
         </div>
