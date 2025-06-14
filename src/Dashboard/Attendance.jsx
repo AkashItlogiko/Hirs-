@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Attendance = () => {
-  const [attendanceData, setAttendanceData] = useState([]);
+const Absence = () => {
+  const [absences, setAbsences] = useState([]);
 
   useEffect(() => {
-    // Fetch attendance data from Laravel backend
+    // Fetch absence data from Laravel backend
     axios
-      .get("http://your-laravel-backend.com/api/attendance")
+      .get("http://your-laravel-backend.com/api/absences")
       .then((response) => {
-        setAttendanceData(response.data);
+        setAbsences(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching attendance data:", error);
+        console.error("Error fetching absences:", error);
       });
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 w-full">
-      <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">
-        Attendance Report
+    <div className="min-h-screen bg-gray-700 w-full">
+      <h1 className="text-2xl font-bold text-center text-white mb-6">
+        Absence Report
       </h1>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
@@ -27,46 +27,50 @@ const Attendance = () => {
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                  Id
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                  Name
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                  Designation
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                  Department
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                   Date
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Employee Name
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Status
                 </th>
               </tr>
             </thead>
             <tbody>
-              {attendanceData.length > 0 ? (
-                attendanceData.map((record, index) => (
+              {absences.length > 0 ? (
+                absences.map((absence, index) => (
                   <tr key={index} className="hover:bg-gray-100">
                     <td className="px-4 py-4 text-gray-600 border-b">
-                      {record.date}
+                      {absence.id}
                     </td>
                     <td className="px-4 py-4 text-gray-600 border-b">
-                      {record.employee_name}
+                      {absence.name}
                     </td>
-                    <td
-                      className={`px-4 py-4 border-b ${
-                        record.status === "Present"
-                          ? "text-green-600"
-                          : record.status === "Absent"
-                          ? "text-red-600"
-                          : "text-yellow-600"
-                      }`}
-                    >
-                      {record.status}
+                    <td className="px-4 py-4 text-gray-600 border-b">
+                      {absence.designation}
+                    </td>
+                    <td className="px-4 py-4 text-gray-600 border-b">
+                      {absence.department}
+                    </td>
+                    <td className="px-4 py-4 text-gray-600 border-b">
+                      {absence.date}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan="3"
+                    colSpan="5"
                     className="px-4 py-4 text-center text-gray-500"
                   >
-                    No attendance records found.
+                    No absence records found.
                   </td>
                 </tr>
               )}
@@ -78,4 +82,4 @@ const Attendance = () => {
   );
 };
 
-export default Attendance;
+export default Absence;
