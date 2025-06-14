@@ -17,7 +17,7 @@ const Absence = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-800 w-full">
+    <div className="min-h-screen bg-gray-700 w-full">
       <h1 className="text-2xl font-bold text-center text-white mb-6">
         Absence Report
       </h1>

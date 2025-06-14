@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Absence = () => {
-  const [absences, setAbsences] = useState([]);
+const Attendance = () => {
+  const [attendanceData, setAttendanceData] = useState([]);
 
   useEffect(() => {
-    // Fetch absence data from Laravel backend
+    // Fetch attendance data from Laravel backend
     axios
-      .get("http://your-laravel-backend.com/api/absences")
+      .get("http://your-laravel-backend.com/api/attendance")
       .then((response) => {
-        setAbsences(response.data);
+        setAttendanceData(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching absences:", error);
+        console.error("Error fetching attendance data:", error);
       });
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-700 w-full">
       <h1 className="text-2xl font-bold text-center text-white mb-6">
-        Absence Report
+        Attendance Report
       </h1>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
@@ -30,47 +30,46 @@ const Absence = () => {
                   Id
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Name
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Designation
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Department
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                   Date
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                  Employee Name
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                  Status
                 </th>
               </tr>
             </thead>
             <tbody>
-              {absences.length > 0 ? (
-                absences.map((absence, index) => (
+              {attendanceData.length > 0 ? (
+                attendanceData.map((record, index) => (
                   <tr key={index} className="hover:bg-gray-100">
                     <td className="px-4 py-4 text-gray-600 border-b">
-                      {absence.id}
+                      {record.date}
                     </td>
                     <td className="px-4 py-4 text-gray-600 border-b">
-                      {absence.name}
+                      {record.employee_name}
                     </td>
-                    <td className="px-4 py-4 text-gray-600 border-b">
-                      {absence.designation}
-                    </td>
-                    <td className="px-4 py-4 text-gray-600 border-b">
-                      {absence.department}
-                    </td>
-                    <td className="px-4 py-4 text-gray-600 border-b">
-                      {absence.date}
+                    <td
+                      className={`px-4 py-4 border-b ${
+                        record.status === "Present"
+                          ? "text-green-600"
+                          : record.status === "Absent"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {record.status}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan="5"
+                    colSpan="3"
                     className="px-4 py-4 text-center text-gray-500"
                   >
-                    No absence records found.
+                    No attendance records found.
                   </td>
                 </tr>
               )}
@@ -82,4 +81,4 @@ const Absence = () => {
   );
 };
 
-export default Absence;
+export default Attendance;
