@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MdAdminPanelSettings } from "react-icons/md";
-import { Link } from "react-router-dom";
 
 const AllEmployees = () => {
   const [employees, setEmployees] = useState([]);
@@ -19,16 +17,11 @@ const AllEmployees = () => {
   }, []);
 
   return (
-    <main className="p-6 bg-gray-700 min-h-screen">
-       <div className='sidebar-brand'>  
-                <Link to={"/"}>
-                <MdAdminPanelSettings  className='icon_header'/> HRIS
-                </Link>            
-       </div> 
-      <div className="mb-6 text-center">
-        <h1 className="text-3xl font-bold text-gray-250">All Employees</h1>
+    <main className="p-6 bg-gray-700 min-h-screen flex flex-col items-center">
+      <div className="mb-6 text-center w-full">
+        <h1 className="text-3xl font-bold text-white">All Employees</h1>
       </div>
-      <div className="bg-white rounded-lg shadow-md p-4">
+      <div className="bg-white rounded-lg shadow-md w-full max-w-7xl">
         <div className="overflow-x-auto">
           <table className="w-full bg-gray-50 rounded-md border-collapse">
             <thead className="bg-gray-100 border-b">
@@ -59,10 +52,7 @@ const AllEmployees = () => {
                 ))
               ) : (
                 <tr>
-                  <td
-                    className="px-6 py-3 text-center text-gray-500"
-                    colSpan="8"
-                  >
+                  <td className="px-6 py-3 text-center text-gray-500" colSpan="8">
                     No employees found.
                   </td>
                 </tr>

@@ -14,7 +14,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
     <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive": ""}>
         <div className='sidebar-title'>
             <div className='sidebar-brand'>  
-                <Link to={"/"}>
+                <Link to={"/home"}>
                 <MdAdminPanelSettings  className='icon_header'/> HRIS
                 </Link>            
                 
@@ -24,7 +24,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
 
         <ul className='sidebar-list'>
             <li className='sidebar-list-item'>
-                <Link>
+                <Link to={"/dashboard"}>
                     <BsGrid1X2Fill className='icon'/> Dashboard
                 </Link>
             </li>
@@ -35,21 +35,20 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                 </Link>
             </li>
             <li className='sidebar-list-item'>
-                <Link to="/">
+                <Link to="/attendance">
                     <IoHandRightSharp className='icon'/> Attendance
                 </Link>
             </li>
             <li className='sidebar-list-item'>
-                <Link to="/">
+                <Link to="/absence">
                     <IoMdLogOut className='icon'/> Absence
                 </Link>
             </li>
             <li className='sidebar-list-item'>
-                <Link to="/">
+                <Link to="/salary">
                     <FaMoneyCheckDollar  className='icon'/> Salary
                 </Link>
             </li>
-            
         </ul>
     </aside>
   )

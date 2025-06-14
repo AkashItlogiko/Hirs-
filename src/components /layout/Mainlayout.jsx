@@ -1,8 +1,10 @@
 import { useState } from "react";
-import "../App.css";
-import Header from './Header';
-import Sidebar from './Sidebar';
-import Dashboard from "./Dashboard";
+import "../../App.css";
+
+import Header from '../../Dashboard/Header';
+import Sidebar from '../../Dashboard/Sidebar';
+ 
+import { Outlet } from "react-router-dom";
 
 const Mainlayout = () => {
     const[openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -12,8 +14,9 @@ const Mainlayout = () => {
     return (
         <div className='grid-container'>
         <Header OpenSidebar={OpenSidebar}/>
+        <Outlet/>
         <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-        <Dashboard/>
+        
         </div>
     );
 };
