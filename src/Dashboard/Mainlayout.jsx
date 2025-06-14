@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "../App.css";
 import Header from './Header';
-import Home from './Home';
 import Sidebar from './Sidebar';
+import Dashboard from "./Dashboard";
 
 const Mainlayout = () => {
     const[openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -13,7 +13,7 @@ const Mainlayout = () => {
         <div className='grid-container'>
         <Header OpenSidebar={OpenSidebar}/>
         <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-        <Home/>
+        <Dashboard/>
         </div>
     );
 };
