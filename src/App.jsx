@@ -11,6 +11,7 @@ import EmployeeCreateForm from './Dashboard/EmployeeCreateForm';
 import AttendanceCreateForm from './Dashboard/AttendanceCreateForm';
 import Events from './Dashboard/Events';
 import EventsCreateForm from './Dashboard/EventsCreateForm';
+import SalaryCreateForm from './Dashboard/SalaryCreateForm';
 
 function App() {
 
@@ -38,6 +39,10 @@ const router=createBrowserRouter([
   {
     path:"/salary",
     element:<Salary/>,
+  },
+  {
+   path:"/salaryform",
+   element:<SalaryCreateForm/>
   },
   {
     path:"/home",

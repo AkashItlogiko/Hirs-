@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Salary = () => {
   const [salaries, setSalaries] = useState([]);
+  const navigate = useNavigate();
+ 
 
   useEffect(() => {
     // Fetch salary data from Laravel backend
@@ -22,6 +25,15 @@ const Salary = () => {
         Salary Report
       </h1>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
+         <div className="flex justify-between items-center p-4">
+          <h2 className="text-lg font-semibold text-gray-700">Salary List</h2>
+          <button
+            onClick={() => navigate("/salaryform")} // Navigate to event creation route
+            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700"
+          >
+            Create
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-separate border-spacing-0">
             <thead className="bg-gray-200 text-gray-700">
