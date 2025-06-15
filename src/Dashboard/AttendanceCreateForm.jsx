@@ -3,41 +3,35 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
-const EmployeeCreateForm = () => {
+const AttendanceCreateForm = () => {
   const initialValues = {
-    id: "",
-    name: "",
-    position: "",
+    idNo: "",
+    employeeName: "",
+    designation: "",
     department: "",
-    email: "",
-    phone_number: "",
-    salary: "",
-    address: "",
+    date: "",
+    status: "",
   };
 
   const validationSchema = Yup.object({
-    id: Yup.number().required("ID is required"),
-    name: Yup.string().required("Name is required"),
-    position: Yup.string().required("Position is required"),
+    idNo: Yup.string().required("ID No is required"),
+    employeeName: Yup.string().required("Employee Name is required"),
+    designation: Yup.string().required("Designation is required"),
     department: Yup.string().required("Department is required"),
-    email: Yup.string().email("Invalid email format").required("Email is required"),
-    phone_number: Yup.string()
-      .matches(/^\d{11}$/, "Must be 11 digits")
-      .required("Phone number is required"),
-    salary: Yup.number().required("Salary is required"),
-    address: Yup.string().required("Address is required"),
+    date: Yup.date().required("Date is required"),
+    status: Yup.string().required("Status is required"),
   });
 
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
     axios
-      .post("http://your-laravel-backend.com/api/employees", values)
+      .post("http://your-laravel-backend.com/api/attendance", values)
       .then((response) => {
-        alert("Employee created successfully!");
+        alert("Attendance created successfully!");
         resetForm();
       })
       .catch((error) => {
-        console.error("Error creating employee:", error);
-        alert("Failed to create employee.");
+        console.error("Error creating attendance:", error);
+        alert("Failed to create attendance.");
       })
       .finally(() => {
         setSubmitting(false);
@@ -47,7 +41,7 @@ const EmployeeCreateForm = () => {
   return (
     <div className="bg-gray-700 min-h-screen w-full flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Create Employee</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Create Attendance</h2>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -55,52 +49,55 @@ const EmployeeCreateForm = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              {/* Grid Layout */}
               <div className="grid grid-cols-2 gap-4">
                 {/* Left Column */}
                 <div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Id No</label>
+                    <label className="block text-gray-700 font-medium mb-2">ID No</label>
                     <Field
                       type="text"
-                      name="id"
+                      name="idNo"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter ID"
+                      placeholder="Enter ID No"
                     />
                     <ErrorMessage
-                      name="id"
+                      name="idNo"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Name</label>
+                    <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
                     <Field
                       type="text"
-                      name="name"
+                      name="employeeName"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Name"
+                      placeholder="Enter Employee Name"
                     />
                     <ErrorMessage
-                      name="name"
+                      name="employeeName"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Position</label>
+                    <label className="block text-gray-700 font-medium mb-2">Designation</label>
                     <Field
                       type="text"
-                      name="position"
+                      name="designation"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Position"
+                      placeholder="Enter Designation"
                     />
                     <ErrorMessage
-                      name="position"
+                      name="designation"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
+                </div>
+
+                {/* Right Column */}
+                <div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Department</label>
                     <Field
@@ -115,62 +112,32 @@ const EmployeeCreateForm = () => {
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
-                </div>
-
-                {/* Right Column */}
-                <div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Email</label>
+                    <label className="block text-gray-700 font-medium mb-2">Date</label>
                     <Field
-                      type="email"
-                      name="email"
+                      type="date"
+                      name="date"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Email"
                     />
                     <ErrorMessage
-                      name="email"
+                      name="date"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Phone Number</label>
+                    <label className="block text-gray-700 font-medium mb-2">Status</label>
                     <Field
-                      type="text"
-                      name="phone_number"
+                      as="select"
+                      name="status"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Phone Number"
-                    />
+                    >
+                      <option value="">Select Status</option>
+                      <option value="Present">Present</option>
+                      <option value="Absent">Absent</option>
+                    </Field>
                     <ErrorMessage
-                      name="phone_number"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Salary</label>
-                    <Field
-                      type="text"
-                      name="salary"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Salary"
-                    />
-                    <ErrorMessage
-                      name="salary"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Address</label>
-                    <Field
-                      type="text"
-                      name="address"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Address"
-                    />
-                    <ErrorMessage
-                      name="address"
+                      name="status"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -185,7 +152,7 @@ const EmployeeCreateForm = () => {
                   isSubmitting ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
                 }`}
               >
-                {isSubmitting ? "Submitting..." : "Create Employee"}
+                {isSubmitting ? "Submitting..." : "Create Attendance"}
               </button>
             </Form>
           )}
@@ -195,4 +162,4 @@ const EmployeeCreateForm = () => {
   );
 };
 
-export default EmployeeCreateForm;
+export default AttendanceCreateForm;

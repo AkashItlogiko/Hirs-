@@ -5,10 +5,12 @@ import Mainlayout from './components /layout/Mainlayout';
 import AllEmployees from './Dashboard/AllEmployees';
 import Dashboard from './Dashboard/Dashboard';
 import Attendance from './Dashboard/Attendance';
-import Absence from './Dashboard/Absence';
 import Salary from './Dashboard/Salary';
 import Logo from './Dashboard/Logo';
 import EmployeeCreateForm from './Dashboard/EmployeeCreateForm';
+import AttendanceCreateForm from './Dashboard/AttendanceCreateForm';
+import Events from './Dashboard/Events';
+import EventsCreateForm from './Dashboard/EventsCreateForm';
 
 function App() {
 
@@ -34,10 +36,6 @@ const router=createBrowserRouter([
     element:<Attendance/>,
   },
   {
-    path:"/absence",
-    element:<Absence/>
-  },
-  {
     path:"/salary",
     element:<Salary/>,
   },
@@ -48,6 +46,18 @@ const router=createBrowserRouter([
   {
     path:"/employeeform",
     element:<EmployeeCreateForm/>
+  },
+  {
+    path:"/attendanceform",
+    element:<AttendanceCreateForm/>
+  },
+  {
+    path:"/events",
+    element:<Events/>
+  },
+  {
+    path:"/eventsform",
+    element:<EventsCreateForm/>
   }
     
     ]

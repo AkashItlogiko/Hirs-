@@ -26,7 +26,7 @@ const Salary = () => {
           <table className="w-full table-auto border-separate border-spacing-0">
             <thead className="bg-gray-200 text-gray-700">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Id</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold">Id No</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Name</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Designation</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Department</th>

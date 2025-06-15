@@ -2,32 +2,31 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Attendance = () => {
-  const [attendanceData, setAttendanceData] = useState([]);
+const Events = () => {
+  const [events, setEvents] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch attendance data from Laravel backend
     axios
-      .get("http://your-laravel-backend.com/api/attendance")
+      .get("http://your-laravel-backend.com/api/events") // Replace with your API endpoint
       .then((response) => {
-        setAttendanceData(response.data);
+        setEvents(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching attendance data:", error);
+        console.error("Error fetching event data:", error);
       });
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-700 w-full">
       <h1 className="text-2xl font-bold text-center text-white mb-6">
-        Attendance Report
+        Upcoming Events
       </h1>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
-         <div className="flex justify-between items-center p-4">
-          <h2 className="text-lg font-semibold text-gray-700">Attendance List</h2>
-            <button
-            onClick={() => navigate("/attendanceform")} // 3. Navigate to /create route
+        <div className="flex justify-between items-center p-4">
+          <h2 className="text-lg font-semibold text-gray-700">Events List</h2>
+          <button
+            onClick={() => navigate("/eventsform")} // Navigate to event creation route
             className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700"
           >
             Create
@@ -38,16 +37,7 @@ const Attendance = () => {
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Id No
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Employee Name
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Designation
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                  Department
+                  Event Name
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                   Date
@@ -58,32 +48,35 @@ const Attendance = () => {
               </tr>
             </thead>
             <tbody>
-              {attendanceData.length > 0 ? (
-                attendanceData.map((record, index) => (
+              {events.length > 0 ? (
+                events.map((event, index) => (
                   <tr key={index} className="hover:bg-gray-100">
                     <td className="px-4 py-4 text-gray-600 border-b">
-                      {record.date}
+                      {event.name}
                     </td>
                     <td className="px-4 py-4 text-gray-600 border-b">
-                      {record.employee_name}
+                      {new Date(event.date_time).toLocaleDateString()}
                     </td>
                     <td
                       className={`px-4 py-4 border-b ${
-                        record.status === "Present"
-                          ? "text-green-600"
-                          : record.status === "Absent"
-                          ? "text-red-600"
-                          : "text-yellow-600"
+                        new Date(event.date_time) > new Date()
+                          ? "text-blue-600"
+                          : "text-red-600"
                       }`}
                     >
-                      {record.status}
+                      {new Date(event.date_time) > new Date()
+                        ? "Upcoming"
+                        : "Ended"}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td className="px-6 py-3 text-center text-gray-500" colSpan="8">
-                    No attendance records found.
+                  <td
+                    colSpan="3"
+                    className="px-6 py-3 text-center text-gray-500"
+                  >
+                    No events found.
                   </td>
                 </tr>
               )}
@@ -95,4 +88,4 @@ const Attendance = () => {
   );
 };
 
-export default Attendance;
+export default Events;

@@ -8,13 +8,14 @@ import
 { BsGrid1X2Fill}
  from 'react-icons/bs'
 import { Link } from 'react-router-dom';
+import { SlCalender } from "react-icons/sl";
 
 function Sidebar({openSidebarToggle, OpenSidebar}) {
   return (
     <aside id="sidebar" className={openSidebarToggle ? "sidebar-responsive": ""}>
         <div className='sidebar-title'>
             <div className='sidebar-brand'>  
-                <Link to={"/home"}>
+                <Link to={"/dashboard"}>
                 <MdAdminPanelSettings  className='icon_header'/> HRIS
                 </Link>            
                 
@@ -39,14 +40,19 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                     <IoHandRightSharp className='icon'/> Attendance
                 </Link>
             </li>
-            <li className='sidebar-list-item'>
-                <Link to="/absence">
-                    <IoMdLogOut className='icon'/> Absence
+             <li className='sidebar-list-item'>
+                <Link to="/salary">
+                    <FaMoneyCheckDollar  className='icon'/> Salary
                 </Link>
             </li>
             <li className='sidebar-list-item'>
-                <Link to="/salary">
-                    <FaMoneyCheckDollar  className='icon'/> Salary
+                <Link to="/events">
+                    <SlCalender />Upcoming Events
+                </Link>
+            </li>
+            <li className='sidebar-list-item'>
+                <Link to="/logout">
+                    <IoMdLogOut className='icon'/> LogOut
                 </Link>
             </li>
         </ul>

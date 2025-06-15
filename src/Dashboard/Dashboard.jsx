@@ -2,6 +2,7 @@ import { MdGroups2 } from "react-icons/md";
 import { IoHandRightSharp } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
+import { SlCalender } from "react-icons/sl";
 
 function Dashboard() {
   return (
@@ -27,8 +28,8 @@ function Dashboard() {
         </div>
         <div className="card" style={{ flex: "1 1 calc(50% - 16px)", maxWidth: "calc(50% - 16px)" }}>
           <div className="card-inner">
-            <h3>Absence</h3>
-            <IoMdLogOut className="card_icon" />
+            <h3>Upcoming Events</h3>
+            <SlCalender />
           </div>
           <h1>33</h1>
         </div>
