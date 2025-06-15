@@ -21,6 +21,8 @@ const Login = () => {
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user_info));
 
+      navigate("/dashboard"); // Redirect to dashboard or home page
+
       // Redirect or update UI
     } catch (error) {
       console.error("Login failed:", error);
@@ -42,20 +44,8 @@ const Login = () => {
       style={{ background: "url('../src/assets/react.jpg')" }}
     >
       <div className="bg-slate-800 border border-slate-600 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-30 relative">
-        {isLoggedIn ? (
-          // Logout UI
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl font-bold text-center mb-6">Welcome Back!</h1>
-            <p className="mb-4">You are logged in.</p>
-            <button
-              onClick={handleLogout}
-              className="w-full text-[18px] rounded bg-red-500 py-2 hover:bg-red-600 transition-colors duration-300"
-            >
-              Logout
-            </button>
-          </div>
-        ) : (
-          // Login UI
+      
+      
           <>
             <h1 className="text-4xl font-bold text-center mb-6">Login</h1>
             <form onSubmit={handleSubmit}>
@@ -99,7 +89,7 @@ const Login = () => {
               </button>
             </form>
           </>
-        )}
+       
       </div>
     </div>
   );

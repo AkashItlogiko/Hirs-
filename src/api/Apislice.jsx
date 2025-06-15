@@ -13,7 +13,16 @@ export const apiAuth = createApi({
         url: '/login',
       }),
     }),
+    logOut: builder.mutation({
+      query: ({ token }) => ({
+        method: 'POST',
+        url: '/logout',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation } = apiAuth;
+export const { useLoginMutation, useLogOutMutation } = apiAuth;
