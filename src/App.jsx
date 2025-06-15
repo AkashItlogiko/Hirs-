@@ -8,6 +8,7 @@ import Attendance from './Dashboard/Attendance';
 import Absence from './Dashboard/Absence';
 import Salary from './Dashboard/Salary';
 import Logo from './Dashboard/Logo';
+import EmployeeCreateForm from './Dashboard/EmployeeCreateForm';
 
 function App() {
 
@@ -43,6 +44,10 @@ const router=createBrowserRouter([
   {
     path:"/home",
     element:<Logo/>
+  },
+  {
+    path:"/employeeform",
+    element:<EmployeeCreateForm/>
   }
     
     ]

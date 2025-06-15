@@ -30,9 +30,6 @@ const Salary = () => {
                 <th className="px-6 py-4 text-left text-sm font-semibold">Name</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Designation</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Department</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Basic Salary</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Allowances</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Deductions</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Net Salary</th>
                 <th className="px-6 py-4 text-left text-sm font-semibold">Pay Date</th>
               </tr>
@@ -52,15 +49,6 @@ const Salary = () => {
                     </td>
                     <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
                       {salary.department}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.basic_salary}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.allowances}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.deductions}
                     </td>
                     <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
                       {salary.net_salary}
