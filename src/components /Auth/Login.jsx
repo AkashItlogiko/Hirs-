@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { apiAuth } from "../api/Apislice";
+import { apiAuth } from "../../api/Apislice";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -33,7 +33,7 @@ const Login = () => {
     // Remove token and user info
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    navigate("/"); // Redirect to login page or home
+    navigate("/login"); // Redirect to login page or home
   };
 
   const isLoggedIn = !!localStorage.getItem("token"); // Check if user is logged in

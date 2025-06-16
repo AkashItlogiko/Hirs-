@@ -1,28 +1,30 @@
- 
-import Login from './components /Login';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Mainlayout from './components /layout/Mainlayout';
 import AllEmployees from './Dashboard/AllEmployees';
 import Dashboard from './Dashboard/Dashboard';
 import Attendance from './Dashboard/Attendance';
 import Salary from './Dashboard/Salary';
-import Logo from './Dashboard/Logo';
+// import Logo from './Dashboard/Logo';
 import EmployeeCreateForm from './Dashboard/EmployeeCreateForm';
 import AttendanceCreateForm from './Dashboard/AttendanceCreateForm';
-import Events from './Dashboard/Events';
-import EventsCreateForm from './Dashboard/EventsCreateForm';
 import SalaryCreateForm from './Dashboard/SalaryCreateForm';
+import Login from "./components /Auth/Login";
+import ProtectedRoute from "./components /Auth/ProtectedRoute";
 
 function App() {
 
   const router = createBrowserRouter([
     {
       path: "/login",
-      element: <Login />, // Login route is now independent
+      element: <Login/>, // Login route is now independent
     },
     {
       path: "/",
-      element: <Mainlayout />,
+      element: (
+        <ProtectedRoute>
+          <Mainlayout />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "/dashboard",
@@ -44,10 +46,10 @@ function App() {
           path: "/salaryform",
           element: <SalaryCreateForm />
         },
-        {
-          path: "/home",
-          element: <Logo />
-        },
+        // {
+        //   path: "/home",
+        //   element: <Logo />
+        // },
         {
           path: "/employeeform",
           element: <EmployeeCreateForm />
@@ -56,14 +58,14 @@ function App() {
           path: "/attendanceform",
           element: <AttendanceCreateForm />
         },
-        {
-          path: "/events",
-          element: <Events />
-        },
-        {
-          path: "/eventsform",
-          element: <EventsCreateForm />
-        }
+        // {
+        //   path: "/events",
+        //   element: <Events />
+        // },
+        // {
+        //   path: "/eventsform",
+        //   element: <EventsCreateForm />
+        // }
       ]
     },
   ]);
