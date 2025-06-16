@@ -10,6 +10,9 @@ import AttendanceCreateForm from './Dashboard/AttendanceCreateForm';
 import SalaryCreateForm from './Dashboard/SalaryCreateForm';
 import Login from "./components /Auth/Login";
 import ProtectedRoute from "./components /Auth/ProtectedRoute";
+import NotFound from "./components /Auth/NotFound";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 
@@ -68,9 +71,21 @@ function App() {
         // }
       ]
     },
+    {
+    path: "*", // Fallback route
+    element: <NotFound />,
+  },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+     <RouterProvider router={router} />
+     <ToastContainer position="top-right" autoClose={3000} />
+    </>
+   
+    
+  ) 
+
 }
 
 export default App;

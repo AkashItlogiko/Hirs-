@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { apiAuth } from "../../api/Apislice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,11 +22,14 @@ const Login = () => {
       localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify(response.user_info));
 
+      toast.success("Login successful!");
+
       navigate("/dashboard"); // Redirect to dashboard or home page
 
       // Redirect or update UI
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("Login failed. Please check your credentials.");
     }
   };
 
@@ -34,6 +38,7 @@ const Login = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login"); // Redirect to login page or home
+    
   };
 
   const isLoggedIn = !!localStorage.getItem("token"); // Check if user is logged in

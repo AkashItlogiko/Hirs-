@@ -7,8 +7,8 @@ import
 { BsGrid1X2Fill}
  from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom';
-import { SlCalender } from "react-icons/sl";
 import { apiAuth } from "../api/Apislice";
+import { toast } from "react-toastify";
 
 function Sidebar({openSidebarToggle, OpenSidebar}) {
     const navigate = useNavigate();
@@ -18,17 +18,17 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
     const handleLogout = async () => {
       const token = localStorage.getItem('token'); // Retrieve token from localStorage
       if (!token) {
-        console.error('No token found');
+        toast.error("No token found. Please log in first.");
         return;
       }
   
       try {
         const response = await logOut({ token }).unwrap();
         console.log('Logout successful:', response);
-  
+        toast.success("Logout successful!");
         // Optionally clear token from localStorage
         localStorage.removeItem('token');
-        navigate('/login'); // Redirect to login page after logout
+       setTimeout(() => navigate("/login"), 500); // Redirect to login page after logout
       } catch (error) {
         console.error('Logout failed:', error);
       }
