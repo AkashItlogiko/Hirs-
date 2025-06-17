@@ -49,10 +49,7 @@ function App() {
           path: "/salaryform",
           element: <SalaryCreateForm />
         },
-        // {
-        //   path: "/home",
-        //   element: <Logo />
-        // },
+     
         {
           path: "/employeeform",
           element: <EmployeeCreateForm />
@@ -61,14 +58,7 @@ function App() {
           path: "/attendanceform",
           element: <AttendanceCreateForm />
         },
-        // {
-        //   path: "/events",
-        //   element: <Events />
-        // },
-        // {
-        //   path: "/eventsform",
-        //   element: <EventsCreateForm />
-        // }
+  
       ]
     },
     {
