@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetEmployeesQuery, useDeleteEmployeeMutation } from "../api/Apislice";
 
@@ -6,7 +6,7 @@ const AllEmployees = () => {
   const navigate = useNavigate();
 
   // Fetch employee data using RTK Query
-  const { data: employees = [], isLoading, isError } = useGetEmployeesQuery();
+  const { data: employees = [], isError } = useGetEmployeesQuery();
   const [deleteEmployee] = useDeleteEmployeeMutation();
 
   const handleDelete = async (id) => {
@@ -49,19 +49,7 @@ const AllEmployees = () => {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? (
-                <tr>
-                  <td colSpan="8" className="px-6 py-3 text-center text-gray-500">
-                    Loading employees...
-                  </td>
-                </tr>
-              ) : isError ? (
-                <tr>
-                  <td colSpan="8" className="px-6 py-3 text-center text-gray-500">
-                    Error fetching employees.
-                  </td>
-                </tr>
-              ) : employees.length > 0 ? (
+              {employees.length > 0 ? (
                 employees.map((employee) => (
                   <tr key={employee.id} className="hover:bg-gray-100">
                     <td className="px-6 py-3 border-b text-gray-600">{employee.id}</td>
