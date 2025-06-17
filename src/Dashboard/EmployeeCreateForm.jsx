@@ -13,7 +13,7 @@ const EmployeeCreateForm = () => {
     department: "",
     email: "",
     phone_number: "",
-    salary: "",
+    
     address: "",
   };
 
@@ -26,7 +26,7 @@ const EmployeeCreateForm = () => {
     phone_number: Yup.string()
       .matches(/^\d{11}$/, "Must be 11 digits")
       .required("Phone number is required"),
-    salary: Yup.number().required("Salary is required"),
+    
     address: Yup.string().required("Address is required"),
   });
 
@@ -145,21 +145,7 @@ const EmployeeCreateForm = () => {
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Salary</label>
-                    <Field
-                      type="number"
-                      name="salary"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Salary"
-                    />
-                    <ErrorMessage
-                      name="salary"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
+                  </div>       
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Address</label>
                     <Field
