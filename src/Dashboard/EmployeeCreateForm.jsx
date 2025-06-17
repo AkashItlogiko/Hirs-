@@ -1,9 +1,11 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { useCreateEmployeeMutation } from "../api/Apislice"; // Import RTK mutation hook
 
 const EmployeeCreateForm = () => {
+  const [createEmployee] = useCreateEmployeeMutation(); // Use RTK mutation hook
+
   const initialValues = {
     id: "",
     name: "",
@@ -28,20 +30,17 @@ const EmployeeCreateForm = () => {
     address: Yup.string().required("Address is required"),
   });
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    axios
-      .post("http://your-laravel-backend.com/api/employees", values)
-      .then((response) => {
-        alert("Employee created successfully!");
-        resetForm();
-      })
-      .catch((error) => {
-        console.error("Error creating employee:", error);
-        alert("Failed to create employee.");
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      await createEmployee(values).unwrap(); // RTK Query mutation call
+      alert("Employee created successfully!");
+      resetForm();
+    } catch (error) {
+      console.error("Error creating employee:", error);
+      alert("Failed to create employee.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -150,7 +149,7 @@ const EmployeeCreateForm = () => {
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Salary</label>
                     <Field
-                      type="text"
+                      type="number"
                       name="salary"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter Salary"

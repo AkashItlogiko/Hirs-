@@ -22,7 +22,29 @@ export const apiAuth = createApi({
         },
       }),
     }),
+    getEmployees: builder.query({
+      query: () => '/employees',
+    }),
+    deleteEmployee: builder.mutation({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/employees/${id}`,
+      }),
+    }),
+    createEmployee: builder.mutation({
+      query: (employeeData) => ({
+        method: 'POST',
+        url: '/employees',
+        body: employeeData,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogOutMutation } = apiAuth;
+export const {
+  useLoginMutation,
+  useLogOutMutation,
+  useGetEmployeesQuery,
+  useDeleteEmployeeMutation,
+  useCreateEmployeeMutation, // Export the new hook
+} = apiAuth;
