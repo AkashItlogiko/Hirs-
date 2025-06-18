@@ -47,6 +47,15 @@ export const apiAuth = createApi({
         url: `/attendance/${id}`,
       }),
     }),
+    getSalaries: builder.query({
+      query: () => '/salaries',
+    }),
+    deleteSalary: builder.mutation({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/salaries/${id}`,
+      }),
+    }),
   }),
 });
 
@@ -56,6 +65,8 @@ export const {
   useGetEmployeesQuery,
   useDeleteEmployeeMutation,
   useCreateEmployeeMutation,
-  useGetAttendanceQuery, // Export the new hook
-  useDeleteAttendanceMutation, // Export the new hook
+  useGetAttendanceQuery,
+  useDeleteAttendanceMutation,
+  useGetSalariesQuery, // Hook for fetching salary data
+  useDeleteSalaryMutation, // Hook for deleting a salary record
 } = apiAuth;

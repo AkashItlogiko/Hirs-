@@ -1,9 +1,11 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { useCreateSalaryMutation } from "../api/Apislice"; // Adjust the import path as needed
 
 const SalaryCreateForm = () => {
+  const [createSalary, { isLoading }] = useCreateSalaryMutation();
+
   const initialValues = {
     idNo: "",
     name: "",
@@ -24,20 +26,17 @@ const SalaryCreateForm = () => {
     payDate: Yup.date().required("Pay Date is required"),
   });
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    axios
-      .post("http://your-laravel-backend.com/api/salaries", values)
-      .then((response) => {
-        alert("Salary details saved successfully!");
-        resetForm();
-      })
-      .catch((error) => {
-        console.error("Error saving salary details:", error);
-        alert("Failed to save salary details.");
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      await createSalary(values).unwrap();
+      alert("Salary details saved successfully!");
+      resetForm();
+    } catch (error) {
+      console.error("Error saving salary details:", error);
+      alert("Failed to save salary details.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -54,7 +53,6 @@ const SalaryCreateForm = () => {
           {({ isSubmitting }) => (
             <Form>
               <div className="grid grid-cols-2 gap-6">
-                {/* Left Column */}
                 <div>
                   <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2">
@@ -122,7 +120,6 @@ const SalaryCreateForm = () => {
                   </div>
                 </div>
 
-                {/* Right Column */}
                 <div>
                   <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2">
@@ -161,14 +158,16 @@ const SalaryCreateForm = () => {
               <div className="flex justify-center mt-6">
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isLoading}
                   className={`w-full px-4 py-2 text-white rounded-md shadow ${
-                    isSubmitting
+                    isSubmitting || isLoading
                       ? "bg-gray-500"
                       : "bg-blue-600 hover:bg-blue-700"
                   }`}
                 >
-                  {isSubmitting ? "Submitting..." : "Save Salary Details"}
+                  {isSubmitting || isLoading
+                    ? "Submitting..."
+                    : "Save Salary Details"}
                 </button>
               </div>
             </Form>

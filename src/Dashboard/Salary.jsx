@@ -1,78 +1,84 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useGetSalariesQuery, useDeleteSalaryMutation } from "../api/Apislice";
 
 const Salary = () => {
-  const [salaries, setSalaries] = useState([]);
   const navigate = useNavigate();
- 
 
-  useEffect(() => {
-    // Fetch salary data from Laravel backend
-    axios
-      .get("http://your-laravel-backend.com/api/salaries")
-      .then((response) => {
-        setSalaries(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching salaries:", error);
-      });
-  }, []);
+  // Fetch salary data using RTK Query
+  const { data: salaryData = [] } = useGetSalariesQuery();
+  const [deleteSalary] = useDeleteSalaryMutation();
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this salary record?")) {
+      try {
+        await deleteSalary(id).unwrap();
+        alert("Salary record deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting salary record:", error);
+      }
+    }
+  };
+
+  const handleUpdate = (id) => {
+    navigate(`/salaryform/${id}`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-700 w-full">
-      <h1 className="text-2xl font-bold text-center text-white mb-6">
-        Salary Report
-      </h1>
+      <h1 className="text-2xl font-bold text-center text-white mb-6">Salary Report</h1>
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
-         <div className="flex justify-between items-center p-4">
+        <div className="flex justify-between items-center p-4">
           <h2 className="text-lg font-semibold text-gray-700">Salary List</h2>
           <button
-            onClick={() => navigate("/salaryform")} // Navigate to event creation route
+            onClick={() => navigate("/salaryform")}
             className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700"
           >
             Create
           </button>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full table-auto border-separate border-spacing-0">
-            <thead className="bg-gray-200 text-gray-700">
+          <table className="w-full table-auto">
+            <thead className="bg-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Id No</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Name</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Designation</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Department</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Net Salary</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold">Pay Date</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Designation</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Department</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Net Salary</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Pay Date</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {salaries.length > 0 ? (
-                salaries.map((salary, index) => (
-                  <tr key={index} className="odd:bg-gray-800 even:bg-gray-700 hover:bg-gray-600">
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.id}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.name}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.designation}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.department}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.net_salary}
-                    </td>
-                    <td className="px-6 py-4 text-gray-300 border-t border-gray-600">
-                      {salary.pay_date}
+              {salaryData.length > 0 ? (
+                salaryData.map((record) => (
+                  <tr key={record.id} className="hover:bg-gray-100">
+                    <td className="px-4 py-4 text-gray-600 border-b">{record.id}</td>
+                    <td className="px-4 py-4 text-gray-600 border-b">{record.name}</td>
+                    <td className="px-4 py-4 text-gray-600 border-b">{record.designation}</td>
+                    <td className="px-4 py-4 text-gray-600 border-b">{record.department}</td>
+                    <td className="px-4 py-4 text-gray-600 border-b">{record.net_salary}</td>
+                    <td className="px-4 py-4 text-gray-600 border-b">{record.pay_date}</td>
+                    <td className="px-4 py-4 text-gray-600 border-b">
+                      <button
+                        onClick={() => handleUpdate(record.id)}
+                        className="px-3 py-1 mr-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => handleDelete(record.id)}
+                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="9" className="px-6 py-4 text-center text-gray-400 border-t border-gray-600">
+                  <td colSpan="7" className="px-6 py-3 text-center text-gray-500">
                     No salary records found.
                   </td>
                 </tr>
