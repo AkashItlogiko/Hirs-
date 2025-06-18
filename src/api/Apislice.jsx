@@ -38,6 +38,15 @@ export const apiAuth = createApi({
         body: employeeData,
       }),
     }),
+    getAttendance: builder.query({
+      query: () => '/attendance',
+    }),
+    deleteAttendance: builder.mutation({
+      query: (id) => ({
+        method: 'DELETE',
+        url: `/attendance/${id}`,
+      }),
+    }),
   }),
 });
 
@@ -46,5 +55,7 @@ export const {
   useLogOutMutation,
   useGetEmployeesQuery,
   useDeleteEmployeeMutation,
-  useCreateEmployeeMutation, // Export the new hook
+  useCreateEmployeeMutation,
+  useGetAttendanceQuery, // Export the new hook
+  useDeleteAttendanceMutation, // Export the new hook
 } = apiAuth;

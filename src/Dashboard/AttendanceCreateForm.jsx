@@ -1,9 +1,11 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
+import { useCreateEmployeeMutation } from "../api/Apislice"; // Adjust the import path based on your project structure
 
 const AttendanceCreateForm = () => {
+  const [createAttendance, { isLoading, isError }] = useCreateEmployeeMutation(); // Use RTK Query hook
+
   const initialValues = {
     idNo: "",
     employeeName: "",
@@ -22,20 +24,17 @@ const AttendanceCreateForm = () => {
     status: Yup.string().required("Status is required"),
   });
 
-  const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    axios
-      .post("http://your-laravel-backend.com/api/attendance", values)
-      .then((response) => {
-        alert("Attendance created successfully!");
-        resetForm();
-      })
-      .catch((error) => {
-        console.error("Error creating attendance:", error);
-        alert("Failed to create attendance.");
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      await createAttendance(values).unwrap(); // RTK Query mutation
+      alert("Attendance created successfully!");
+      resetForm();
+    } catch (error) {
+      console.error("Error creating attendance:", error);
+      alert("Failed to create attendance.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -145,14 +144,16 @@ const AttendanceCreateForm = () => {
                 </div>
               </div>
 
+              {isError && <div className="text-red-500 text-sm mb-2">Failed to create attendance.</div>}
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isLoading}
                 className={`w-full px-4 py-2 text-white rounded-md shadow ${
-                  isSubmitting ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
+                  isSubmitting || isLoading ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
                 }`}
               >
-                {isSubmitting ? "Submitting..." : "Create Attendance"}
+                {isSubmitting || isLoading ? "Submitting..." : "Create Attendance"}
               </button>
             </Form>
           )}
