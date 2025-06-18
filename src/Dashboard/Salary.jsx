@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetSalariesQuery, useDeleteSalaryMutation } from "../api/Apislice";
 
@@ -8,6 +8,8 @@ const Salary = () => {
   // Fetch salary data using RTK Query
   const { data: salaryData = [] } = useGetSalariesQuery();
   const [deleteSalary] = useDeleteSalaryMutation();
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this salary record?")) {
@@ -24,6 +26,10 @@ const Salary = () => {
     navigate(`/salaryform/${id}`);
   };
 
+  const filteredSalaries = salaryData.filter((record) =>
+    record.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gray-700 w-full">
       <h1 className="text-2xl font-bold text-center text-white mb-6">Salary Report</h1>
@@ -36,6 +42,15 @@ const Salary = () => {
           >
             Create
           </button>
+        </div>
+        <div className="p-4">
+          <input
+            type="text"
+            placeholder="Search by employee name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
         <div className="overflow-x-auto">
           <table className="w-full table-auto">
@@ -51,8 +66,8 @@ const Salary = () => {
               </tr>
             </thead>
             <tbody>
-              {salaryData.length > 0 ? (
-                salaryData.map((record) => (
+              {filteredSalaries.length > 0 ? (
+                filteredSalaries.map((record) => (
                   <tr key={record.id} className="hover:bg-gray-100">
                     <td className="px-4 py-4 text-gray-600 border-b">{record.id}</td>
                     <td className="px-4 py-4 text-gray-600 border-b">{record.name}</td>

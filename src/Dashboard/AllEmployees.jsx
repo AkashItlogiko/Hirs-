@@ -51,7 +51,7 @@ const AllEmployees = () => {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full bg-gray-50 rounded-md border-collapse">
-            <thead className="bg-gray-100 border-b">
+            <thead className="bg-gray-200 border-b">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Employee Name</th>
