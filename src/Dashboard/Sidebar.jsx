@@ -68,11 +68,6 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                     <FaMoneyCheckDollar  className='icon'/> Salary
                 </Link>
             </li>
-            {/* <li className='sidebar-list-item'>
-                <Link to="/events">
-                    <SlCalender />Upcoming Events
-                </Link>
-            </li> */}
             <li className='sidebar-list-item'>
                 <Link onClick={handleLogout}>
                     <IoMdLogOut className='icon'/> LogOut
