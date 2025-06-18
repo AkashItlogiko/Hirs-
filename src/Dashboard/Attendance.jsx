@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetAttendanceQuery, useDeleteAttendanceMutation } from "../api/Apislice";
 
@@ -8,6 +8,8 @@ const Attendance = () => {
   // Fetch attendance data using RTK Query
   const { data: attendanceData = [] } = useGetAttendanceQuery();
   const [deleteAttendance] = useDeleteAttendanceMutation();
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this record?")) {
@@ -24,6 +26,10 @@ const Attendance = () => {
     navigate(`/attendanceform/${id}`);
   };
 
+  const filteredAttendance = attendanceData.filter((record) =>
+    record.employee_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gray-700 w-full">
       <h1 className="text-2xl font-bold text-center text-white mb-6">Attendance Report</h1>
@@ -36,6 +42,15 @@ const Attendance = () => {
           >
             Create
           </button>
+        </div>
+        <div className="p-4">
+          <input
+            type="text"
+            placeholder="Search by employee name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
         <div className="overflow-x-auto">
           <table className="w-full table-auto">
@@ -51,8 +66,8 @@ const Attendance = () => {
               </tr>
             </thead>
             <tbody>
-              {attendanceData.length > 0 ? (
-                attendanceData.map((record) => (
+              {filteredAttendance.length > 0 ? (
+                filteredAttendance.map((record) => (
                   <tr key={record.id} className="hover:bg-gray-100">
                     <td className="px-4 py-4 text-gray-600 border-b">{record.id}</td>
                     <td className="px-4 py-4 text-gray-600 border-b">{record.employee_name}</td>
