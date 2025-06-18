@@ -73,7 +73,7 @@ const EmployeeCreateForm = () => {
                     />
                   </div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Name</label>
+                    <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
                     <Field
                       type="text"
                       name="name"
@@ -87,7 +87,7 @@ const EmployeeCreateForm = () => {
                     />
                   </div>
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Position</label>
+                    <label className="block text-gray-700 font-medium mb-2">Designation</label>
                     <Field
                       type="text"
                       name="position"

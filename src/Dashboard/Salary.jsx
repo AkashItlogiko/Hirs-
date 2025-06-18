@@ -42,7 +42,7 @@ const Salary = () => {
             <thead className="bg-gray-200">
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Employee Name</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Designation</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Department</th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Net Salary</th>

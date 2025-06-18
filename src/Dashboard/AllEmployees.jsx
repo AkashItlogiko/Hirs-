@@ -39,8 +39,8 @@ const AllEmployees = () => {
             <thead className="bg-gray-100 border-b">
               <tr>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Position</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Employee Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Designation</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Department</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Phone Number</th>
