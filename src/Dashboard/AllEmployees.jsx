@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetEmployeesQuery, useDeleteEmployeeMutation } from "../api/Apislice";
 
@@ -9,6 +9,8 @@ const AllEmployees = () => {
   const { data: employees = [], isError } = useGetEmployeesQuery();
   const [deleteEmployee] = useDeleteEmployeeMutation();
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
@@ -18,6 +20,10 @@ const AllEmployees = () => {
       }
     }
   };
+
+  const filteredEmployees = employees.filter((employee) =>
+    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <main className="bg-gray-700 min-h-screen w-full">
@@ -34,6 +40,15 @@ const AllEmployees = () => {
             Create
           </button>
         </div>
+        <div className="p-4">
+          <input
+            type="text"
+            placeholder="Search by employee name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-4 py-2 border rounded-md shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full bg-gray-50 rounded-md border-collapse">
             <thead className="bg-gray-100 border-b">
@@ -49,8 +64,8 @@ const AllEmployees = () => {
               </tr>
             </thead>
             <tbody>
-              {employees.length > 0 ? (
-                employees.map((employee) => (
+              {filteredEmployees.length > 0 ? (
+                filteredEmployees.map((employee) => (
                   <tr key={employee.id} className="hover:bg-gray-100">
                     <td className="px-6 py-3 border-b text-gray-600">{employee.id}</td>
                     <td className="px-6 py-3 border-b text-gray-600">{employee.name}</td>
