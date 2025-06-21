@@ -5,14 +5,16 @@ import apiSalary from "../api/Salaryslice"; // Import Salary API slice
 const Salary = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
 
   const token = localStorage.getItem("token");
 
   // Fetch salary data using RTK Query
   const { data: salaries } = apiSalary.useListQuery({
     params: {
-      page: 1,
-      per_page: 10,
+      page: currentPage,
+      per_page: perPage,
       search: searchTerm,
     },
     token,
@@ -29,10 +31,12 @@ const Salary = () => {
     }
   };
 
+  const totalPages = salaries?.data?.last_page || 1;
+
   return (
     <main className="bg-gray-700 min-h-screen w-full">
       <div className="mb-6 text-center">
-        <h1 className="text-3xl font-bold text-white">Salary Report</h1>
+        <h1 className="text-3xl py-4 font-bold text-white">Salary Report</h1>
       </div>
       <div className="bg-white rounded-lg shadow-md w-full">
         <div className="flex justify-between items-center p-4">
@@ -67,7 +71,7 @@ const Salary = () => {
               </tr>
             </thead>
             <tbody>
-              {salaries && salaries?.data?.data?.map((salary) => (
+              {salaries?.data?.data?.map((salary) => (
                 <tr key={salary.id} className="hover:bg-gray-100">
                   <td className="px-6 py-3 border-b text-gray-600">{salary.id}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.employee_name}</td>
@@ -91,7 +95,6 @@ const Salary = () => {
                   </td>
                 </tr>
               ))}
-
               {salaries?.data?.data?.length === 0 && (
                 <tr>
                   <td colSpan="7" className="px-6 py-3 border-b text-center text-gray-600">
@@ -101,6 +104,44 @@ const Salary = () => {
               )}
             </tbody>
           </table>
+        </div>
+        <div className="flex justify-between items-center p-4">
+          <select
+            value={perPage}
+            onChange={(e) => setPerPage(Number(e.target.value))}
+            className="px-4 py-2 border rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value={10}>10 per page</option>
+            <option value={50}>50 per page</option>
+            <option value={100}>100 per page</option>
+          </select>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded-md shadow ${
+                currentPage === 1
+                  ? "bg-blue-600 cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2 text-gray-700">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded-md shadow ${
+                currentPage === totalPages
+                  ? "bg-blue-600 cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </main>

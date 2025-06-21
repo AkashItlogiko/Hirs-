@@ -16,7 +16,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
     
 
     const handleLogout = async () => {
-      const token = localStorage.getItem('token'); // Retrieve token from localStorage
+      const token = localStorage.getItem('token');  
       if (!token) {
         toast.error("No token found. Please log in first.");
         return;
@@ -26,9 +26,9 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
         const response = await logOut({ token }).unwrap();
         console.log('Logout successful:', response);
         toast.success("Logout successful!");
-        // Optionally clear token from localStorage
+    
         localStorage.removeItem('token');
-       setTimeout(() => navigate("/login"), 500); // Redirect to login page after logout
+       setTimeout(() => navigate("/login"), 500);  
       } catch (error) {
         console.error('Logout failed:', error);
       }

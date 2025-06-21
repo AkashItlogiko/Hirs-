@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../../App.css";
 
-import Header from '../../Dashboard/Header';
+// import Header from '../../Dashboard/Header';
 import Sidebar from '../../Dashboard/Sidebar';
  
 import { Outlet } from "react-router-dom";
@@ -13,7 +13,7 @@ const Mainlayout = () => {
   }
     return (
         <div className='grid-container'>
-        <Header OpenSidebar={OpenSidebar}/>
+        {/* <Header OpenSidebar={OpenSidebar}/> */}
         <Outlet className="w-full" />
         <Sidebar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>     
         </div>

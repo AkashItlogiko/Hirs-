@@ -4,7 +4,6 @@ import AllEmployees from './Dashboard/AllEmployees';
 import Dashboard from './Dashboard/Dashboard';
 import Attendance from './Dashboard/Attendance';
 import Salary from './Dashboard/Salary';
-// import Logo from './Dashboard/Logo';
 import EmployeeCreateForm from './Dashboard/EmployeeCreateForm';
 import AttendanceCreateForm from './Dashboard/AttendanceCreateForm';
 import SalaryCreateForm from './Dashboard/SalaryCreateForm';
