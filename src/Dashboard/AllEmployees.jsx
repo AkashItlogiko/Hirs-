@@ -1,15 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetEmployeesQuery, useDeleteEmployeeMutation } from "../api/Apislice";
+import apiEmployee from "../api/Employeeslice";
 
 const AllEmployees = () => {
   const navigate = useNavigate();
 
-  // Fetch employee data using RTK Query
-  const { data: employees = [], isError } = useGetEmployeesQuery();
-  const [deleteEmployee] = useDeleteEmployeeMutation();
-
   const [searchTerm, setSearchTerm] = useState("");
+
+  const token = localStorage.getItem('token');
+
+  // Fetch employee data using RTK Query
+  const { data: employees } = apiEmployee.useListQuery({
+    params: {
+      page: 1,
+      per_page: 10,
+      search: searchTerm,
+    }, 
+    token,
+  });
+  // const [deleteEmployee] = useDeleteEmployeeMutation();
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
@@ -21,9 +30,9 @@ const AllEmployees = () => {
     }
   };
 
-  const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredEmployees = employees.filter((employee) =>
+  //   employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
     <main className="bg-gray-700 min-h-screen w-full">
@@ -64,39 +73,39 @@ const AllEmployees = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredEmployees.length > 0 ? (
-                filteredEmployees.map((employee) => (
-                  <tr key={employee.id} className="hover:bg-gray-100">
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.id}</td>
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.name}</td>
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.position}</td>
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.department}</td>
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.email}</td>
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.phone_number}</td>
-                    <td className="px-6 py-3 border-b text-gray-600">{employee.address}</td>
-                    <td className="px-6 py-3 border-b text-gray-600 flex space-x-2">
-                      <button
-                        onClick={() => navigate(`/employeeform/${employee.id}`)}
-                        className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => handleDelete(employee.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="8" className="px-6 py-3 text-center text-gray-500">
-                    No employees found.
-                  </td>
-                </tr>
-              )}
+               {employees && employees?.data?.data?.map((employee) => (
+                 <tr key={employee.id} className="hover:bg-gray-100">
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.id}</td>
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.employee_name}</td>
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.designation}</td>
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.department}</td>
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.email}</td>
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.phone_number}</td>
+                 <td className="px-6 py-3 border-b text-gray-600">{employee.address}</td>
+                 <td className="px-6 py-3 border-b text-gray-600 flex space-x-2">
+                   <button
+                     onClick={() => navigate(`/employeeform/${employee.id}`)}
+                     className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                   >
+                     Update
+                   </button>
+                   <button
+                     onClick={() => handleDelete(employee.id)}
+                     className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                   >
+                     Delete
+                   </button>
+                 </td>
+               </tr>    
+               ))}
+
+               {employees?.data?.data?.length === 0 && (
+               <tr>
+                 <td colSpan="8" className="px-6 py-3 border-b text-center text-gray-600">
+                   No employees found.
+                 </td>
+                 </tr>
+              )}                  
             </tbody>
           </table>
         </div>

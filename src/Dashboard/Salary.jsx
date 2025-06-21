@@ -1,20 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetSalariesQuery, useDeleteSalaryMutation } from "../api/Apislice";
+import apiSalary from "../api/Salaryslice"; // Import Salary API slice
 
 const Salary = () => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const token = localStorage.getItem("token");
 
   // Fetch salary data using RTK Query
-  const { data: salaryData = [] } = useGetSalariesQuery();
-  const [deleteSalary] = useDeleteSalaryMutation();
-
-  const [searchTerm, setSearchTerm] = useState("");
+  const { data: salaries } = apiSalary.useListQuery({
+    params: {
+      page: 1,
+      per_page: 10,
+      search: searchTerm,
+    },
+    token,
+  });
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this salary record?")) {
       try {
-        await deleteSalary(id).unwrap();
+        await apiSalary.endpoints.deleteSalary.initiate(id).unwrap();
         alert("Salary record deleted successfully!");
       } catch (error) {
         console.error("Error deleting salary record:", error);
@@ -22,18 +29,12 @@ const Salary = () => {
     }
   };
 
-  const handleUpdate = (id) => {
-    navigate(`/salaryform/${id}`);
-  };
-
-  const filteredSalaries = salaryData.filter((record) =>
-    record.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
-    <div className="min-h-screen bg-gray-700 w-full">
-      <h1 className="text-2xl font-bold text-center text-white mb-6">Salary Report</h1>
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
+    <main className="bg-gray-700 min-h-screen w-full">
+      <div className="mb-6 text-center">
+        <h1 className="text-3xl font-bold text-white">Salary Report</h1>
+      </div>
+      <div className="bg-white rounded-lg shadow-md w-full">
         <div className="flex justify-between items-center p-4">
           <h2 className="text-lg font-semibold text-gray-700">Salary List</h2>
           <button
@@ -53,47 +54,47 @@ const Salary = () => {
           />
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
-            <thead className="bg-gray-200">
+          <table className="w-full bg-gray-50 rounded-md border-collapse">
+            <thead className="bg-gray-200 border-b">
               <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Employee Name</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Designation</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Department</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Net Salary</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Pay Date</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Employee Name</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Designation</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Department</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Net Salary</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Pay Date</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredSalaries.length > 0 ? (
-                filteredSalaries.map((record) => (
-                  <tr key={record.id} className="hover:bg-gray-100">
-                    <td className="px-4 py-4 text-gray-600 border-b">{record.id}</td>
-                    <td className="px-4 py-4 text-gray-600 border-b">{record.name}</td>
-                    <td className="px-4 py-4 text-gray-600 border-b">{record.designation}</td>
-                    <td className="px-4 py-4 text-gray-600 border-b">{record.department}</td>
-                    <td className="px-4 py-4 text-gray-600 border-b">{record.net_salary}</td>
-                    <td className="px-4 py-4 text-gray-600 border-b">{record.pay_date}</td>
-                    <td className="px-4 py-4 text-gray-600 border-b">
-                      <button
-                        onClick={() => handleUpdate(record.id)}
-                        className="px-3 py-1 mr-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => handleDelete(record.id)}
-                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+              {salaries && salaries?.data?.data?.map((salary) => (
+                <tr key={salary.id} className="hover:bg-gray-100">
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.id}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.employee_name}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.designation}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.department}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.net_salary}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.pay_date}</td>
+                  <td className="px-6 py-3 border-b flex space-x-2">
+                    <button
+                      onClick={() => navigate(`/salaryform/${salary.id}`)}
+                      className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => handleDelete(salary.id)}
+                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+
+              {salaries?.data?.data?.length === 0 && (
                 <tr>
-                  <td colSpan="7" className="px-6 py-3 text-center text-gray-500">
+                  <td colSpan="7" className="px-6 py-3 border-b text-center text-gray-600">
                     No salary records found.
                   </td>
                 </tr>
@@ -102,7 +103,7 @@ const Salary = () => {
           </table>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
