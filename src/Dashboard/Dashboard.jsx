@@ -26,13 +26,6 @@ function Dashboard() {
           </div>
           <h1>12</h1>
         </div>
-        {/* <div className="card" style={{ flex: "1 1 calc(50% - 16px)", maxWidth: "calc(50% - 16px)" }}>
-          <div className="card-inner">
-            <h3>Upcoming Events</h3>
-            <SlCalender />
-          </div>
-          <h1>33</h1>
-        </div> */}
         <div className="card" style={{ flex: "1 1 calc(50% - 16px)", maxWidth: "calc(50% - 16px)" }}>
           <div className="card-inner">
             <h3>Salary</h3>
