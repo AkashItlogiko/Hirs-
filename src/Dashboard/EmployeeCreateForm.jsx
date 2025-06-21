@@ -1,10 +1,18 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useCreateEmployeeMutation } from "../api/Apislice"; // Import RTK mutation hook
+// import { useCreateEmployeeMutation } from "../api/Apislice"; // Import RTK mutation hook
+
+import apiEmployee from "../api/Employeeslice";
 
 const EmployeeCreateForm = () => {
-  const [createEmployee] = useCreateEmployeeMutation(); // Use RTK mutation hook
+  // const [createEmployee] = useCreateEmployeeMutation(); // Use RTK mutation hook
+
+  const token = localStorage.getItem("token"); // Get token from local storage
+
+  const [storeEmployee, { error }] = apiEmployee.useStoreEmployeeMutation(); // Use RTK Query mutation hook
+
+  console.log('error', error);
 
   const initialValues = {
     id: "",
@@ -32,12 +40,13 @@ const EmployeeCreateForm = () => {
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      await createEmployee(values).unwrap(); // RTK Query mutation call
-      alert("Employee created successfully!");
+      const result = await storeEmployee({ data: { ...values }, token });
+      console.log("Employee created:", result);
+      // alert("Employee created successfully!");
       resetForm();
     } catch (error) {
       console.error("Error creating employee:", error);
-      alert("Failed to create employee.");
+      alert("Failed to create+1 (497) 836-5786 employee.");
     } finally {
       setSubmitting(false);
     }
