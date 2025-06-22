@@ -26,14 +26,14 @@ const EmployeeCreateForm = () => {
   };
 
   const validationSchema = Yup.object({
-    id: Yup.number().required("ID is required"),
-    name: Yup.string().required("Name is required"),
+    id_card_number: Yup.number().required("ID is required"),
+    employee_name: Yup.string().required("Name is required"),
     position: Yup.string().required("Position is required"),
     department: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email format").required("Email is required"),
- phone_number: Yup.string()
-  .matches(/^(?:\+8801|01)[3-9]\d{8}$/, "Must be a valid Bangladeshi phone number (11 digits with optional +880 prefix)")
-  .required("Phone number is required"),
+    phone_number: Yup.string()
+    .matches(/^(?:\+8801|01)[3-9]\d{8}$/, "Must be a valid Bangladeshi phone number (11 digits with optional +880 prefix)")
+    .required("Phone number is required"),
 
     
     address: Yup.string().required("Address is required"),
@@ -72,7 +72,7 @@ const EmployeeCreateForm = () => {
                     <label className="block text-gray-700 font-medium mb-2">Id No</label>
                     <Field
                       type="text"
-                      name="id"
+                      name="id_card_number"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter ID"
                     />
@@ -86,7 +86,7 @@ const EmployeeCreateForm = () => {
                     <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
                     <Field
                       type="text"
-                      name="name"
+                      name="employee_name"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter Name"
                     />
