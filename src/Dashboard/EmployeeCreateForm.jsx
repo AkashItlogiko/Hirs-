@@ -8,9 +8,9 @@ import apiEmployee from "../api/Employeeslice";
 const EmployeeCreateForm = () => {
   // const [createEmployee] = useCreateEmployeeMutation(); // Use RTK mutation hook
 
-  const token = localStorage.getItem("token"); // Get token from local storage
+  const token = localStorage.getItem("token");  
 
-  const [storeEmployee, { error }] = apiEmployee.useStoreEmployeeMutation(); // Use RTK Query mutation hook
+  const [storeEmployee, { error }] = apiEmployee.useStoreEmployeeMutation();  
 
   console.log('error', error);
 
@@ -31,9 +31,10 @@ const EmployeeCreateForm = () => {
     position: Yup.string().required("Position is required"),
     department: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email format").required("Email is required"),
-    phone_number: Yup.string()
-      .matches(/^\d{11}$/, "Must be 11 digits")
-      .required("Phone number is required"),
+ phone_number: Yup.string()
+  .matches(/^(?:\+8801|01)[3-9]\d{8}$/, "Must be a valid Bangladeshi phone number (11 digits with optional +880 prefix)")
+  .required("Phone number is required"),
+
     
     address: Yup.string().required("Address is required"),
   });
@@ -41,7 +42,7 @@ const EmployeeCreateForm = () => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const result = await storeEmployee({ data: { ...values }, token });
-      console.log("Employee created:", result);
+      // console.log("Employee created:", result);
       // alert("Employee created successfully!");
       resetForm();
     } catch (error) {
@@ -63,9 +64,9 @@ const EmployeeCreateForm = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              {/* Grid Layout */}
+              
               <div className="grid grid-cols-2 gap-4">
-                {/* Left Column */}
+                
                 <div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Id No</label>

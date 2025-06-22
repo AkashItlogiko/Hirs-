@@ -56,7 +56,7 @@ export const apiAuth = createApi({
         url: `/salaries/${id}`,
       }),
     }),
-    createSalary: builder.mutation({ // Added mutation for creating salary
+    createSalary: builder.mutation({  
       query: (salaryData) => ({
         method: 'POST',
         url: '/salaries',
@@ -76,5 +76,5 @@ export const {
   useDeleteAttendanceMutation,
   useGetSalariesQuery,
   useDeleteSalaryMutation,
-  useCreateSalaryMutation, // Export the new hook
+  useCreateSalaryMutation,  
 } = apiAuth;

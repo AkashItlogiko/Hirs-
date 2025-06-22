@@ -7,7 +7,7 @@ const apiEmployee = createApi({
   }),
   endpoints: (builder) => ({
     list: builder.query({
-      providesTags: ['employee'],
+      // providesTags: ['employee'],
       query: ({ params, token }) => ({
         url: 'employee/list',
         method: 'get',
@@ -19,13 +19,15 @@ const apiEmployee = createApi({
     }),
 
     storeEmployee: builder.mutation({
-      invalidatesTags: ['employee'],
+      invalidatesTags: ['employee'],  
       query: ({ data, token }) => ({
         url: 'employee/create',
         method: 'post',
         body: { ...data },
         headers: {
+          'Accept': 'application/json',
           Authorization: `Bearer ${token}`,
+           
         },
       }),
     }),
