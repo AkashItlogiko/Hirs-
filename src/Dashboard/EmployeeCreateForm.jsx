@@ -26,7 +26,7 @@ const EmployeeCreateForm = () => {
   };
 
   const validationSchema = Yup.object({
-    id_card_number: Yup.number().required("ID is required"),
+    id_card_number: Yup.number().max(55).required("ID is required"),
     employee_name: Yup.string().required("Name is required"),
     position: Yup.string().required("Position is required"),
     department: Yup.string().required("Department is required"),
