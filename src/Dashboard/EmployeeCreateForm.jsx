@@ -15,28 +15,23 @@ const EmployeeCreateForm = () => {
   console.log('error', error);
 
   const initialValues = {
-    id: "",
-    name: "",
-    position: "",
+    id_card_number: "", // Ensure all fields have initial values
+    employee_name: "",
+    designation: "",
     department: "",
     email: "",
     phone_number: "",
-    
     address: "",
   };
-
+  
   const validationSchema = Yup.object({
-    id_card_number: Yup.number().max(55).required("ID is required"),
-    employee_name: Yup.string().required("Name is required"),
-    position: Yup.string().required("Position is required"),
+    id_card_number: Yup.number().max(255).required("ID is required"),
+    employee_name: Yup.string().max(255).required("Name is required"),
+    designation: Yup.string().required("Position is required"),
     department: Yup.string().required("Department is required"),
-    email: Yup.string().email("Invalid email format").required("Email is required"),
-    phone_number: Yup.string()
-    .matches(/^(?:\+8801|01)[3-9]\d{8}$/, "Must be a valid Bangladeshi phone number (11 digits with optional +880 prefix)")
-    .required("Phone number is required"),
-
-    
-    address: Yup.string().required("Address is required"),
+    email: Yup.string().email("Invalid email format").required("Email is required").max(255),
+    phone_number: Yup.string().required("Phone number is required").max(14),
+    address: Yup.string().required("Address is required").max(255),
   });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -77,7 +72,7 @@ const EmployeeCreateForm = () => {
                       placeholder="Enter ID"
                     />
                     <ErrorMessage
-                      name="id"
+                      name="id_card_number"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -91,7 +86,7 @@ const EmployeeCreateForm = () => {
                       placeholder="Enter Name"
                     />
                     <ErrorMessage
-                      name="name"
+                      name="employee_name"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -100,12 +95,12 @@ const EmployeeCreateForm = () => {
                     <label className="block text-gray-700 font-medium mb-2">Designation</label>
                     <Field
                       type="text"
-                      name="position"
+                      name="designation"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Position"
+                      placeholder="Enter Designation"
                     />
                     <ErrorMessage
-                      name="position"
+                      name="designation"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />

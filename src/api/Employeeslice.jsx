@@ -7,7 +7,7 @@ const apiEmployee = createApi({
   }),
   endpoints: (builder) => ({
     list: builder.query({
-      // providesTags: ['employee'],
+       
       query: ({ params, token }) => ({
         url: 'employee/list',
         method: 'get',

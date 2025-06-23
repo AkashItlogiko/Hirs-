@@ -16,7 +16,20 @@ const apiSalary = createApi({
         },
       }),
     }),
+    storeSalary: builder.mutation({
+      invalidatesTags: ['salary'],  
+      query: ({ data, token }) => ({
+        url: 'salary/create',  
+        method: 'post',
+        body: { ...data },
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,  
+        },
+      }),
+    }), 
   }),
+  tagTypes: ['salary'],
 });
 
 export default apiSalary;

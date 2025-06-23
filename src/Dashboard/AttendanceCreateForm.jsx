@@ -1,33 +1,35 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useCreateEmployeeMutation } from "../api/Apislice"; // Adjust the import path based on your project structure
-
+ 
+import apiAttendance from "../api/Attendanceslice"; // Import the API slice for attendance
 const AttendanceCreateForm = () => {
-  const [createAttendance, { isLoading, isError }] = useCreateEmployeeMutation(); // Use RTK Query hook
+  const token = localStorage.getItem("token");  
+  const [storeAttendance,{error}]=apiAttendance.useStoreAttendanceMutation(); // Use RTK mutation hook for attendance
+  console.log('error', error);
 
   const initialValues = {
-    idNo: "",
-    employeeName: "",
-    designation: "",
+    id_card_no: "",
+    employee_name: "",
     department: "",
+    designation: "",
     date: "",
     status: "",
   };
 
   const validationSchema = Yup.object({
-    idNo: Yup.string().required("ID No is required"),
-    employeeName: Yup.string().required("Employee Name is required"),
-    designation: Yup.string().required("Designation is required"),
-    department: Yup.string().required("Department is required"),
+    id_card_no: Yup.string().max(255).required("ID No is required"),
+    employee_name: Yup.string().max(255).required("Employee Name is required"),
+    designation: Yup.string().max(255).required("Designation is required"),
+    department: Yup.string().max(255).required("Department is required"),
     date: Yup.date().required("Date is required"),
-    status: Yup.string().required("Status is required"),
+    status: Yup.string().oneOf(["Present", "Absent"],"Status must be 'Present' or 'Absent").required("Status is required"),
   });
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async(values, { setSubmitting, resetForm }) => {
     try {
-      await createAttendance(values).unwrap(); // RTK Query mutation
-      alert("Attendance created successfully!");
+      const result =await storeAttendance({ data: { ...values }, token });
+      // alert("Attendance created successfully!");
       resetForm();
     } catch (error) {
       console.error("Error creating attendance:", error);
@@ -49,35 +51,26 @@ const AttendanceCreateForm = () => {
           {({ isSubmitting }) => (
             <Form>
               <div className="grid grid-cols-2 gap-4">
-                {/* Left Column */}
                 <div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">ID No</label>
                     <Field
                       type="text"
-                      name="idNo"
+                      name="id_card_no"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter ID No"
                     />
-                    <ErrorMessage
-                      name="idNo"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="id_card_no" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
                     <Field
                       type="text"
-                      name="employeeName"
+                      name="employee_name"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter Employee Name"
                     />
-                    <ErrorMessage
-                      name="employeeName"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="employee_name" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Designation</label>
@@ -87,15 +80,9 @@ const AttendanceCreateForm = () => {
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter Designation"
                     />
-                    <ErrorMessage
-                      name="designation"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="designation" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                 </div>
-
-                {/* Right Column */}
                 <div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Department</label>
@@ -105,11 +92,7 @@ const AttendanceCreateForm = () => {
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                       placeholder="Enter Department"
                     />
-                    <ErrorMessage
-                      name="department"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="department" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Date</label>
@@ -118,11 +101,7 @@ const AttendanceCreateForm = () => {
                       name="date"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                     />
-                    <ErrorMessage
-                      name="date"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="date" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Status</label>
@@ -135,25 +114,19 @@ const AttendanceCreateForm = () => {
                       <option value="Present">Present</option>
                       <option value="Absent">Absent</option>
                     </Field>
-                    <ErrorMessage
-                      name="status"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                 </div>
               </div>
-
-              {isError && <div className="text-red-500 text-sm mb-2">Failed to create attendance.</div>}
-
+               
               <button
                 type="submit"
-                disabled={isSubmitting || isLoading}
+                disabled={isSubmitting}
                 className={`w-full px-4 py-2 text-white rounded-md shadow ${
-                  isSubmitting || isLoading ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
+                  isSubmitting ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
                 }`}
               >
-                {isSubmitting || isLoading ? "Submitting..." : "Create Attendance"}
+                {isSubmitting ? "Submitting..." : "Create Attendance"}
               </button>
             </Form>
           )}

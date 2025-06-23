@@ -1,35 +1,37 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useCreateSalaryMutation } from "../api/Apislice"; // Adjust the import path as needed
-
+// import { useCreateSalaryMutation } from "../api/Apislice"; // Adjust the import path as needed
+import apiSalary from "../api/Salaryslice";
 const SalaryCreateForm = () => {
-  const [createSalary, { isLoading }] = useCreateSalaryMutation();
+  // const [createSalary, { isLoading }] = useCreateSalaryMutation();
+  const token = localStorage.getItem("token");
+  const[storeSalary, {error }] = apiSalary.useStoreSalaryMutation();
+  console.log('error', error);
 
   const initialValues = {
-    idNo: "",
-    name: "",
+    id_card_no: "",
+    employee_name: "",
     designation: "",
     department: "",
-    netSalary: "",
-    payDate: "",
+    pay_date: "",
+    net_salary: "",
   };
 
   const validationSchema = Yup.object({
-    idNo: Yup.string().required("ID No is required"),
-    name: Yup.string().required("Name is required"),
-    designation: Yup.string().required("Designation is required"),
-    department: Yup.string().required("Department is required"),
-    netSalary: Yup.number()
-      .typeError("Net Salary must be a number")
-      .required("Net Salary is required"),
-    payDate: Yup.date().required("Pay Date is required"),
+    id_card_no: Yup.string().required("ID No is required"),
+    employee_name: Yup.string().max(255).required("Name is required"),
+    designation: Yup.string().max(255).required("Designation is required"),
+    department: Yup.string().max(255).required("Department is required"),
+    net_salary: Yup.number().required("Net Salary is required").min(0, "Net Salary must be a positive number"),
+    pay_date: Yup.date().required("Pay Date is required"),
   });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      await createSalary(values).unwrap();
-      alert("Salary details saved successfully!");
+      const result = await storeSalary({ data: { ...values }, token });
+      // await createSalary(values).unwrap();
+      // alert("Salary details saved successfully!");
       resetForm();
     } catch (error) {
       console.error("Error saving salary details:", error);
@@ -56,16 +58,16 @@ const SalaryCreateForm = () => {
                 <div>
                   <div className="mb-4">
                     <label className="block text-gray-700 font-medium mb-2">
-                      ID No
+                      Id No
                     </label>
                     <Field
                       type="text"
-                      name="idNo"
+                      name="id_card_no"
                       placeholder="Enter ID No"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <ErrorMessage
-                      name="idNo"
+                      name="id_card_no"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -76,12 +78,12 @@ const SalaryCreateForm = () => {
                     </label>
                     <Field
                       type="text"
-                      name="name"
+                      name="employee_name"
                       placeholder="Enter Name"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <ErrorMessage
-                      name="name"
+                      name="employee_name"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -127,12 +129,12 @@ const SalaryCreateForm = () => {
                     </label>
                     <Field
                       type="text"
-                      name="netSalary"
+                      name="net_salary"
                       placeholder="Enter Net Salary"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <ErrorMessage
-                      name="netSalary"
+                      name="net_salary"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -143,11 +145,11 @@ const SalaryCreateForm = () => {
                     </label>
                     <Field
                       type="date"
-                      name="payDate"
+                      name="pay_date"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     <ErrorMessage
-                      name="payDate"
+                      name="pay_date"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -158,15 +160,13 @@ const SalaryCreateForm = () => {
               <div className="flex justify-center mt-6">
                 <button
                   type="submit"
-                  disabled={isSubmitting || isLoading}
+                  disabled={isSubmitting}
                   className={`w-full px-4 py-2 text-white rounded-md shadow ${
-                    isSubmitting || isLoading
-                      ? "bg-gray-500"
+                    isSubmitting ? "bg-gray-500"
                       : "bg-blue-600 hover:bg-blue-700"
                   }`}
                 >
-                  {isSubmitting || isLoading
-                    ? "Submitting..."
+                  {isSubmitting ? "Submitting..."
                     : "Save Salary Details"}
                 </button>
               </div>

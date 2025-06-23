@@ -16,7 +16,20 @@ const apiAttendance = createApi({
         },
       }),
     }),
+    storeAttendance: builder.mutation({
+      invalidatesTags: ['attendance'],  
+      query: ({ data, token }) => ({
+        url: 'attendance/create',  
+        method: 'post',
+        body: { ...data },
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,  
+        },
+      }),
+    }),
   }),
+  tagTypes: ['attendance'],
 });
 
 export default apiAttendance;
