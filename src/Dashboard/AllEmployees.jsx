@@ -74,7 +74,7 @@ const AllEmployees = () => {
             <tbody>
               {employees?.data?.data?.map((employee) => (
                 <tr key={employee.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.id}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{employee.id_card_number}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{employee.employee_name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{employee.designation}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{employee.department}</td>

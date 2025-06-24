@@ -23,7 +23,7 @@ const AttendanceCreateForm = () => {
     designation: Yup.string().max(255).required("Designation is required"),
     department: Yup.string().max(255).required("Department is required"),
     date: Yup.date().required("Date is required"),
-    status: Yup.string().oneOf(["Present", "Absent"],"Status must be 'Present' or 'Absent").required("Status is required"),
+    status: Yup.string().oneOf(["present", "absent"],"Status must be 'Present' or 'Absent").required("Status is required"),
   });
 
   const handleSubmit = async(values, { setSubmitting, resetForm }) => {
@@ -111,8 +111,8 @@ const AttendanceCreateForm = () => {
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
                     >
                       <option value="">Select Status</option>
-                      <option value="Present">Present</option>
-                      <option value="Absent">Absent</option>
+                      <option value="present">Present</option>
+                      <option value="absent">Absent</option>
                     </Field>
                     <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
                   </div>

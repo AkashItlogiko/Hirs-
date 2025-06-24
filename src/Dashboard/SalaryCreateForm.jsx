@@ -23,7 +23,7 @@ const SalaryCreateForm = () => {
     employee_name: Yup.string().max(255).required("Name is required"),
     designation: Yup.string().max(255).required("Designation is required"),
     department: Yup.string().max(255).required("Department is required"),
-    net_salary: Yup.number().required("Net Salary is required").min(0, "Net Salary must be a positive number"),
+    net_salary: Yup.string().required("Net Salary is required").min(0, "Net Salary must be a positive number"),
     pay_date: Yup.date().required("Pay Date is required"),
   });
 

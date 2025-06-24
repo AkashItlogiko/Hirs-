@@ -73,7 +73,7 @@ const Salary = () => {
             <tbody>
               {salaries?.data?.data?.map((salary) => (
                 <tr key={salary.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{salary.id}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.id_card_no}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.employee_name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.designation}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.department}</td>
