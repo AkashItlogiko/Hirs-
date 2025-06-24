@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiAttendance from "../api/Attendanceslice"; // Import attendance API slice
+import apiAttendance from "../api/Attendanceslice";  
 
 const Attendance = () => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const Attendance = () => {
 
   const token = localStorage.getItem("token");
 
-  // Fetch attendance data using RTK Query
+   
   const { data: attendance } = apiAttendance.useListQuery({
     params: {
       page: currentPage,
@@ -91,7 +91,7 @@ const Attendance = () => {
                   </td>
                   <td className="px-6 py-3 border-b flex space-x-2">
                     <button
-                      onClick={() => navigate(`/attendanceform/${record.id}`)}
+                      onClick={() => navigate(`/attendance/${record.id}/update`)}
                       className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                     >
                       Update

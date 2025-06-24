@@ -83,7 +83,7 @@ const AllEmployees = () => {
                   <td className="px-6 py-3 border-b text-gray-600">{employee.address}</td>
                   <td className="px-6 py-3 border-b text-gray-600 flex space-x-2">
                     <button
-                      onClick={() => navigate(`/employeeform/${employee.id}`)}
+                      onClick={() => navigate(`/employeeupdateform/${employee.id}`)}
                       className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                     >
                       Update

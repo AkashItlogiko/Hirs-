@@ -12,6 +12,7 @@ import ProtectedRoute from "./components /Auth/ProtectedRoute";
 import NotFound from "./components /Auth/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EmployeeUpdateForm from "./Dashboard/EmployeesUpdateForm";
 
 function App() {
 
@@ -57,6 +58,10 @@ function App() {
           path: "/attendanceform",
           element: <AttendanceCreateForm />
         },
+        {
+          path: "/employeeupdateform/:id",
+          element: <EmployeeUpdateForm />
+        }
   
       ]
     },

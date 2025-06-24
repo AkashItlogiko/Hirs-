@@ -28,7 +28,7 @@ function Dashboard() {
         </div>
         <div className="card" style={{ flex: "1 1 calc(50% - 16px)", maxWidth: "calc(50% - 16px)" }}>
           <div className="card-inner">
-            <h3>Salary</h3>
+            <h3>Total Salary</h3>
             <FaMoneyCheckDollar className="card_icon" />
           </div>
           <h1>42</h1>
