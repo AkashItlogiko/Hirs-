@@ -1,12 +1,14 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
- 
 import apiAttendance from "../api/Attendanceslice"; // Import the API slice for attendance
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const AttendanceCreateForm = () => {
+  const navigate=useNavigate();
   const token = localStorage.getItem("token");  
   const [storeAttendance,{error}]=apiAttendance.useStoreAttendanceMutation(); // Use RTK mutation hook for attendance
-  console.log('error', error);
+   
 
   const initialValues = {
     id_card_no: "",
@@ -29,11 +31,16 @@ const AttendanceCreateForm = () => {
   const handleSubmit = async(values, { setSubmitting, resetForm }) => {
     try {
       const result =await storeAttendance({ data: { ...values }, token });
-      // alert("Attendance created successfully!");
-      resetForm();
+      if(result?.data){
+        toast.success("Attendance created successfully!");
+         resetForm();
+         navigate("/attendance");
+      }else{
+        throw new Error("Unexpected error");
+      }
     } catch (error) {
       console.error("Error creating attendance:", error);
-      alert("Failed to create attendance.");
+      toast.error("Failed to create attendance.");
     } finally {
       setSubmitting(false);
     }

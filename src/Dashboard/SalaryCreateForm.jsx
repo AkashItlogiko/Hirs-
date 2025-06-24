@@ -1,13 +1,14 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-// import { useCreateSalaryMutation } from "../api/Apislice"; // Adjust the import path as needed
 import apiSalary from "../api/Salaryslice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const SalaryCreateForm = () => {
-  // const [createSalary, { isLoading }] = useCreateSalaryMutation();
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const[storeSalary, {error }] = apiSalary.useStoreSalaryMutation();
-  console.log('error', error);
+   
 
   const initialValues = {
     id_card_no: "",
@@ -30,12 +31,17 @@ const SalaryCreateForm = () => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const result = await storeSalary({ data: { ...values }, token });
-      // await createSalary(values).unwrap();
-      // alert("Salary details saved successfully!");
-      resetForm();
+      if(result?.data){
+        toast.success("Salary details saved successfully!");
+        resetForm();
+        navigate("/salary");
+      }else{
+        throw new Error("Unexpected error");
+      }
+     
     } catch (error) {
       console.error("Error saving salary details:", error);
-      alert("Failed to save salary details.");
+      toast.error("Failed to save salary details.");
     } finally {
       setSubmitting(false);
     }

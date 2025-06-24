@@ -1,21 +1,17 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-// import { useCreateEmployeeMutation } from "../api/Apislice"; // Import RTK mutation hook
-
+import { toast } from "react-toastify"; 
+import { useNavigate } from "react-router-dom"; 
 import apiEmployee from "../api/Employeeslice";
 
 const EmployeeCreateForm = () => {
-  // const [createEmployee] = useCreateEmployeeMutation(); // Use RTK mutation hook
-
-  const token = localStorage.getItem("token");  
-
-  const [storeEmployee, { error }] = apiEmployee.useStoreEmployeeMutation();  
-
-  console.log('error', error);
+  const navigate = useNavigate();  
+  const token = localStorage.getItem("token");
+  const [storeEmployee, { error }] = apiEmployee.useStoreEmployeeMutation();
 
   const initialValues = {
-    id_card_number: "", // Ensure all fields have initial values
+    id_card_number: "",
     employee_name: "",
     designation: "",
     department: "",
@@ -23,9 +19,9 @@ const EmployeeCreateForm = () => {
     phone_number: "",
     address: "",
   };
-  
+
   const validationSchema = Yup.object({
-    id_card_number: Yup.number().max(255).required("ID is required"),
+    id_card_number: Yup.string().max(255).required("ID is required"),
     employee_name: Yup.string().max(255).required("Name is required"),
     designation: Yup.string().required("Position is required"),
     department: Yup.string().required("Department is required"),
@@ -37,12 +33,16 @@ const EmployeeCreateForm = () => {
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const result = await storeEmployee({ data: { ...values }, token });
-      // console.log("Employee created:", result);
-      // alert("Employee created successfully!");
-      resetForm();
+      if (result?.data) {
+        toast.success("Employee created successfully!");  
+        resetForm();
+        navigate("/employees"); 
+      } else {
+        throw new Error("Unexpected error");
+      }
     } catch (error) {
       console.error("Error creating employee:", error);
-      alert("Failed to create+1 (497) 836-5786 employee.");
+      toast.error("Failed to create employee.");  
     } finally {
       setSubmitting(false);
     }
@@ -59,9 +59,7 @@ const EmployeeCreateForm = () => {
         >
           {({ isSubmitting }) => (
             <Form>
-              
               <div className="grid grid-cols-2 gap-4">
-                
                 <div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Id No</label>
@@ -120,8 +118,6 @@ const EmployeeCreateForm = () => {
                     />
                   </div>
                 </div>
-
-                {/* Right Column */}
                 <div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Email</label>
@@ -150,7 +146,7 @@ const EmployeeCreateForm = () => {
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
-                  </div>       
+                  </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Address</label>
                     <Field
@@ -167,7 +163,6 @@ const EmployeeCreateForm = () => {
                   </div>
                 </div>
               </div>
-
               <button
                 type="submit"
                 disabled={isSubmitting}

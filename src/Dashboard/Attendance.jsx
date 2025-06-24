@@ -73,18 +73,18 @@ const Attendance = () => {
             <tbody>
               {attendance?.data?.data?.map((record) => (
                 <tr key={record.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{record.id_card_no}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{record.id}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.employee_name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.designation}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.department}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.date}</td>
                   <td
                     className={`px-6 py-3 border-b ${
-                      record.status === "Present"
+                      record.status === "present"
                         ? "text-green-600"
-                        : record.status === "Absent"
+                        : record.status === "absent"
                         ? "text-red-600"
-                        : "text-yellow-600"
+                        : ""
                     }`}
                   >
                     {record.status}
