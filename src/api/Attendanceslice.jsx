@@ -52,6 +52,19 @@ const apiAttendance = createApi({
       }),
       providesTags: ['attendance'],
     }),
+
+    countAttendance: builder.query({
+      query: ({ token, status }) => ({
+        url: 'attendance/total',
+        method: 'get',
+        params: { status },
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      providesTags: ['attendance'],
+    }),
   }),
   tagTypes: ['attendance'],
 });

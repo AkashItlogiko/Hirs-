@@ -66,6 +66,17 @@ const apiEmployee = createApi({
         },
       }),
     }),
+    countEmployee: builder.query({
+      query: ({ token }) => ({
+        url: 'all-employees',
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      providesTags: ['employee'],  
+    }),
 
   }),
   tagTypes: ['employee'],

@@ -51,7 +51,20 @@ const apiSalary = createApi({
         },
       }),
       providesTags: ['salary'],
-    }) 
+    }),
+    
+    countSalary: builder.query({
+      query: ({ token }) => ({
+        url: 'total-salary',
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      providesTags: ['salary'],  
+    }),
+
   }),
   tagTypes: ['salary'],
 });
