@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiEmployee from "../api/Employeeslice";
+import { toast } from "react-toastify";
 
-const AllEmployees = () => {
+const AllEmployees = ({ token: propToken }) => {
   const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
 
-  const token = localStorage.getItem("token");
+  const token = propToken || localStorage.getItem("token");
+  const [deleteEmployee] =
+    apiEmployee.useDeleteEmployeeMutation();
 
   // Fetch employee data using RTK Query
-  const { data: employees } = apiEmployee.useListQuery({
+  const { data: apiEmployees } = apiEmployee.useListQuery({
     params: {
       page: currentPage,
       per_page: perPage,
@@ -24,14 +27,16 @@ const AllEmployees = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
-        await deleteEmployee(id).unwrap();
+        await deleteEmployee({ id, token }).unwrap();
+        toast.success("Employee deleted successfully!");
       } catch (error) {
         console.error("There was an error deleting the employee!", error);
+        toast.error("Failed to delete employee.");
       }
     }
   };
 
-  const totalPages = employees?.data?.last_page || 1;
+  const totalPages = apiEmployees?.data?.last_page || 1;
 
   return (
     <main className="bg-gray-700 min-h-screen w-full">
@@ -61,26 +66,56 @@ const AllEmployees = () => {
           <table className="w-full bg-gray-50 rounded-md border-collapse">
             <thead className="bg-gray-200 border-b">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Id No</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Employee Name</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Designation</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Department</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Phone Number</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Address</th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Id No
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Employee Name
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Designation
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Department
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Email
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Phone Number
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Address
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-              {employees?.data?.data?.map((employee) => (
+              {apiEmployees?.data?.data?.map((employee) => (
                 <tr key={employee.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.id_card_number}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.employee_name}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.designation}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.department}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.email}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.phone_number}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{employee.address}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.id_card_number}
+                  </td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.employee_name}
+                  </td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.designation}
+                  </td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.department}
+                  </td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.email}
+                  </td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.phone_number}
+                  </td>
+                  <td className="px-6 py-3 border-b text-gray-600">
+                    {employee.address}
+                  </td>
                   <td className="px-6 py-3 border-b text-gray-600 flex space-x-2">
                     <button
                       onClick={() => navigate(`/employeeupdateform/${employee.id}`)}
@@ -97,7 +132,7 @@ const AllEmployees = () => {
                   </td>
                 </tr>
               ))}
-              {employees?.data?.data?.length === 0 && (
+              {apiEmployees?.data?.data?.length === 0 && (
                 <tr>
                   <td
                     colSpan="8"

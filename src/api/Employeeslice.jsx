@@ -55,6 +55,17 @@ const apiEmployee = createApi({
   }),
   providesTags: ['employee'],  
 }),
+    deleteEmployee: builder.mutation({
+      invalidatesTags: ['employee'],  
+      query: ({ id, token }) => ({
+        url: `employee/${id}/delete`,
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
 
   }),
   tagTypes: ['employee'],
