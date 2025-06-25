@@ -81,7 +81,7 @@ const Salary = () => {
                   <td className="px-6 py-3 border-b text-gray-600">{salary.pay_date}</td>
                   <td className="px-6 py-3 border-b flex space-x-2">
                     <button
-                      onClick={() => navigate(`/salaryform/${salary.id}`)}
+                      onClick={() => navigate(`/salaryupdateform/${salary.id}`)}
                       className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                     >
                       Update

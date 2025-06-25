@@ -13,6 +13,8 @@ import NotFound from "./components /Auth/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EmployeeUpdateForm from "./Dashboard/EmployeesUpdateForm";
+import AttendanceUpdateForm from "./Dashboard/AttendanceUpdateForm";
+import SalaryUpdateForm from "./Dashboard/SalaryUpdateForm";
 
 function App() {
 
@@ -61,8 +63,15 @@ function App() {
         {
           path: "/employeeupdateform/:id",
           element: <EmployeeUpdateForm />
-        }
-  
+        },
+        {
+          path:"attendanceupdateform/:id",
+          element: <AttendanceUpdateForm />
+        },
+        {
+          path:"salaryupdateform/:id",
+          element: <SalaryUpdateForm />
+        }        
       ]
     },
     {

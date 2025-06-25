@@ -53,7 +53,7 @@ const apiEmployee = createApi({
       Authorization: `Bearer ${token}`,
     },
   }),
-  providesTags: ['employee'], // Helps with cache management and invalidation
+  providesTags: ['employee'],  
 }),
 
   }),

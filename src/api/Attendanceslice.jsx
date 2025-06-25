@@ -7,6 +7,7 @@ const apiAttendance = createApi({
   }),
   endpoints: (builder) => ({
     list: builder.query({
+      providesTags: ['attendance'],
       query: ({ params, token }) => ({
         method: 'get',
         params: params,
@@ -27,6 +28,29 @@ const apiAttendance = createApi({
           Authorization: `Bearer ${token}`,  
         },
       }),
+    }),
+    updateAttendance:builder.mutation({
+      invalidatesTags:['attendance'],
+      query:({id,data,token})=>({
+        url:`attendance/${id}/update`,  
+        method:'put',
+        body:{...data},
+        headers:{
+          'Accept':'application/json',
+          Authorization:`Bearer ${token}`,  
+        },
+      })
+    }),
+    showAttendance: builder.query({
+      query: ({ id, token }) => ({
+        url: `attendance/${id}/show`,
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+      providesTags: ['attendance'],
     }),
   }),
   tagTypes: ['attendance'],

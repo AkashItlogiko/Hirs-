@@ -73,7 +73,7 @@ const Attendance = () => {
             <tbody>
               {attendance?.data?.data?.map((record) => (
                 <tr key={record.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{record.id}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{record.id_card_no}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.employee_name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.designation}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.department}</td>
@@ -91,7 +91,7 @@ const Attendance = () => {
                   </td>
                   <td className="px-6 py-3 border-b flex space-x-2">
                     <button
-                      onClick={() => navigate(`/attendance/${record.id}/update`)}
+                      onClick={() => navigate(`/attendanceupdateform/${record.id}`)}
                       className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                     >
                       Update

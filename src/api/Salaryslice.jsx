@@ -7,6 +7,7 @@ const apiSalary = createApi({
   }),
   endpoints: (builder) => ({
     list: builder.query({
+     providesTags: ['salary'], 
       query: ({ params, token }) => ({
         method: 'get',
         params: params,
@@ -27,7 +28,30 @@ const apiSalary = createApi({
           Authorization: `Bearer ${token}`,  
         },
       }),
-    }), 
+    }),
+    updateSalary: builder.mutation({
+      invalidatesTags: ['salary'],  
+      query: ({ id, data, token }) => ({
+        url: `salary/${id}/update`,  
+        method: 'put',
+        body: { ...data },
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,  
+        },
+      }),
+    }),
+    showSalary:builder.query({
+      query: ({ id, token }) => ({
+        url: `salary/${id}/show`,  
+        method: 'get',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,  
+        },
+      }),
+      providesTags: ['salary'],
+    }) 
   }),
   tagTypes: ['salary'],
 });
