@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiAttendance from "../api/Attendanceslice";  
+import { toast } from "react-toastify";
 
-const Attendance = () => {
+const Attendance = ({token:propToken}) => {
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
 
-  const token = localStorage.getItem("token");
-
+  const token = propToken||localStorage.getItem("token");
+  const [deleteAttendance]=apiAttendance.useDeleteAttendanceMutation();
    
   const { data: attendance } = apiAttendance.useListQuery({
     params: {
@@ -23,8 +25,8 @@ const Attendance = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this attendance record?")) {
       try {
-        await apiAttendance.endpoints.deleteAttendance.initiate(id).unwrap();
-        alert("Attendance record deleted successfully!");
+        await deleteAttendance({id,token}).unwrap();
+        toast.success("Attendance record deleted successfully!");
       } catch (error) {
         console.error("Error deleting attendance record:", error);
       }

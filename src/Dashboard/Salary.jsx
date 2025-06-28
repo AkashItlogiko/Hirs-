@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiSalary from "../api/Salaryslice"; // Import Salary API slice
+import { toast } from "react-toastify";
 
-const Salary = () => {
+const Salary = ({token:propToken}) => {
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
 
-  const token = localStorage.getItem("token");
-
+  const token = propToken||localStorage.getItem("token");
+  const [deleteSalary] = apiSalary.useDeleteSalaryMutation(); // Hook for deleting salary records
   // Fetch salary data using RTK Query
   const { data: salaries } = apiSalary.useListQuery({
     params: {
@@ -23,8 +25,8 @@ const Salary = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this salary record?")) {
       try {
-        await apiSalary.endpoints.deleteSalary.initiate(id).unwrap();
-        alert("Salary record deleted successfully!");
+        await deleteSalary({id,token}).unwrap();
+        toast.success("Salary record deleted successfully!");
       } catch (error) {
         console.error("Error deleting salary record:", error);
       }

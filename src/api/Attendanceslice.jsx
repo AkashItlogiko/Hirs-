@@ -52,6 +52,17 @@ const apiAttendance = createApi({
       }),
       providesTags: ['attendance'],
     }),
+    deleteAttendance: builder.mutation({
+      invalidatesTags: ['attendance'],
+      query: ({ id, token }) => ({
+        url: `attendance/${id}/delete`,
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }), 
 
     countAttendance: builder.query({
       query: ({ token, status }) => ({

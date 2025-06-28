@@ -52,6 +52,17 @@ const apiSalary = createApi({
       }),
       providesTags: ['salary'],
     }),
+    deleteSalary: builder.mutation({
+      invalidatesTags: ['salary'],  
+      query: ({ id, token }) => ({
+        url: `salary/${id}/delete`,  
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,  
+        },
+      }),
+    }),
     
     countSalary: builder.query({
       query: ({ token }) => ({
