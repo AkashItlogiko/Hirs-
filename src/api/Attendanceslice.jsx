@@ -64,6 +64,19 @@ const apiAttendance = createApi({
       }),
     }), 
 
+        employeeAttendance:builder.query({
+      query:({params,token})=>({
+        url:'employee/attendance',
+        mathod:'get',
+        params:{...params},
+        headers:{
+           'Accept': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+      }),
+        providesTags: ['attendance'],
+    }),
+
     countAttendance: builder.query({
       query: ({ token, status }) => ({
         url: 'attendance/total',

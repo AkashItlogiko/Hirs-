@@ -120,6 +120,7 @@ const AttendanceCreateForm = () => {
                       <option value="">Select Status</option>
                       <option value="present">Present</option>
                       <option value="absent">Absent</option>
+                      <option value="absent">On Leave</option>
                     </Field>
                     <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
                   </div>

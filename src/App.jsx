@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import EmployeeUpdateForm from "./Dashboard/EmployeesUpdateForm";
 import AttendanceUpdateForm from "./Dashboard/AttendanceUpdateForm";
 import SalaryUpdateForm from "./Dashboard/SalaryUpdateForm";
+import Attendancereport from "./Dashboard/Attendancereport";
 
 function App() {
 
@@ -67,6 +68,11 @@ function App() {
         {
           path:"attendanceupdateform/:id",
           element: <AttendanceUpdateForm />
+        },
+        {
+          path:"attendancereport/:id",
+          element:<Attendancereport/>
+
         },
         {
           path:"salaryupdateform/:id",
