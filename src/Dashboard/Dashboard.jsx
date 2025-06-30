@@ -44,7 +44,7 @@ const Dashboard = () => {
             <h3>Total Salary</h3>
             <FaMoneyCheckDollar className="card_icon" />
           </div>
-          <h1>{countSalary?.data} $</h1>
+          <h1>{countSalary?.data}$</h1>
         </div>
       </div>
     </main>
