@@ -176,9 +176,10 @@ const AttendanceReport = () => {
                         className={`border border-gray-300 px-6 py-3 ${
                           record.status === 'present'
                             ? 'text-green-600 font-semibold'
-                            : record.status === 'Absent'
+                            : record.status === 'absent'
                             ? 'text-red-600 font-semibold'
-                            : 'text-gray-600'
+                            : record.status ==='on_leave' ? "text-yellow-500"
+                            :" "
                         }`}
                       >
                         {record.status}

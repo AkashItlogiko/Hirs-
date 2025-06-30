@@ -25,7 +25,7 @@ const AttendanceCreateForm = () => {
     designation: Yup.string().max(255).required("Designation is required"),
     department: Yup.string().max(255).required("Department is required"),
     date: Yup.date().required("Date is required"),
-    status: Yup.string().oneOf(["present", "absent"],"Status must be 'Present' or 'Absent").required("Status is required"),
+    status: Yup.string().oneOf(["present", "absent","on_leave"],"Status must be 'Present','Absent or 'On Leave' ").required("Status is required"),
   });
 
   const handleSubmit = async(values, { setSubmitting, resetForm }) => {
@@ -120,7 +120,7 @@ const AttendanceCreateForm = () => {
                       <option value="">Select Status</option>
                       <option value="present">Present</option>
                       <option value="absent">Absent</option>
-                      <option value="absent">On Leave</option>
+                      <option value="on_leave">On Leave</option>
                     </Field>
                     <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
