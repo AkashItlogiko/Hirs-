@@ -9,6 +9,7 @@ import
 import { Link, useNavigate } from 'react-router-dom';
 import { apiAuth } from "../api/Apislice";
 import { toast } from "react-toastify";
+import { FcDepartment } from "react-icons/fc";
 
 function Sidebar({openSidebarToggle, OpenSidebar}) {
     const navigate = useNavigate();
@@ -56,6 +57,12 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                 <Link to={"/employees"}>
                     
                     <MdGroups2 className='icon'/> All Employees
+                </Link>
+            </li>
+            <li className='sidebar-list-item'>
+                <Link to={"/department"}>
+                    
+                    <FcDepartment className='icon'/> Department
                 </Link>
             </li>
             <li className='sidebar-list-item'>
