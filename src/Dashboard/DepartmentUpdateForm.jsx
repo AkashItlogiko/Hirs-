@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import apiDepartment from "../api/Departmentslice";
 
-const DepartmentCreateForm = () => {
+const DepartmentUpdateForm = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const token = localStorage.getItem("token");
-  const [createDepartment] = apiDepartment.useCreateMutation();
+
+  const [updateDepartment] = apiDepartment.useUpdateMutation();
+  const { data: departmentData, error, isLoading, refetch } =
+    apiDepartment.useShowQuery({ id, token });
+
+  useEffect(() => {
+    if (error) {
+      toast.error("Failed to load department data.");
+    }
+  }, [error]);
 
   const initialValues = {
-    name: "",
+    name: departmentData?.data?.name || "",
   };
 
   const validationSchema = Yup.object({
@@ -20,39 +30,41 @@ const DepartmentCreateForm = () => {
       .required("Department name is required"),
   });
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const result = await createDepartment({ data: { ...values }, token });
-      console.log("Create Department API Response:", result);
+      const result = await updateDepartment({ id, data: values, token });
+       
 
       if (result?.error) {
         const message =
-          result.error?.data?.message || "Failed to create department.";
+          result.error?.data?.message || "Failed to update department.";
         throw new Error(message);
       }
 
       if (result?.data) {
-        toast.success(" Department created successfully");
-        resetForm();
+        toast.success("Department updated successfully");
         navigate("/department");
       } else {
         throw new Error("No response data from server.");
       }
     } catch (error) {
-      console.error("Error creating department:", error);
+      console.error("Error updating department:", error);
       toast.error(error.message || "An unexpected error occurred.");
     } finally {
       setSubmitting(false);
     }
   };
 
+  if (isLoading) return <div className="text-center text-white">Loading...</div>;
+
   return (
     <div className="bg-gray-700 min-h-screen w-full flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">
-          Create Department
+          Update Department
         </h2>
         <Formik
+          enableReinitialize
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -82,10 +94,10 @@ const DepartmentCreateForm = () => {
                 className={`w-full px-4 py-2 text-white rounded-md shadow ${
                   isSubmitting
                     ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700"
+                    : "bg-green-600 hover:bg-green-700"
                 }`}
               >
-                {isSubmitting ? "Submitting..." : "Create Department"}
+                {isSubmitting ? "Updating..." : "Update Department"}
               </button>
             </Form>
           )}
@@ -95,4 +107,4 @@ const DepartmentCreateForm = () => {
   );
 };
 
-export default DepartmentCreateForm;
+export default DepartmentUpdateForm;

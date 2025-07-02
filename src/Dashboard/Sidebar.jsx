@@ -54,15 +54,15 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
                 </Link>
             </li>
             <li className='sidebar-list-item'>
-                <Link to={"/employees"}>
-                    
-                    <MdGroups2 className='icon'/> All Employees
-                </Link>
-            </li>
-            <li className='sidebar-list-item'>
                 <Link to={"/department"}>
                     
                     <FcDepartment className='icon'/> Department
+                </Link>
+            </li>
+            <li className='sidebar-list-item'>
+                <Link to={"/employees"}>
+                    
+                    <MdGroups2 className='icon'/> All Employees
                 </Link>
             </li>
             <li className='sidebar-list-item'>

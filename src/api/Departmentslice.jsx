@@ -12,7 +12,7 @@ const apiDepartment = createApi({
       query: ({ params, token }) => ({
         method: 'get',
         params: params,
-        url: 'department/list',
+        url: 'departments/list',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -22,7 +22,7 @@ const apiDepartment = createApi({
     create: builder.mutation({
       invalidatesTags: ['department'],
       query: ({ data, token }) => ({
-        url: 'department/create',
+        url: 'departments/create',
         method: 'post',
         body: { ...data },
         headers: {
@@ -34,7 +34,7 @@ const apiDepartment = createApi({
     update: builder.mutation({
       invalidatesTags: ['department'],
       query: ({ id, data, token }) => ({
-        url: `department/${id}/update`,
+        url: `departments/${id}/update`,
         method: 'put',
         body: { ...data },
         headers: {
@@ -46,7 +46,7 @@ const apiDepartment = createApi({
     show: builder.query({
       providesTags: ['department'],
       query: ({ id, token }) => ({
-        url: `department/${id}/show`,
+        url: `departments/${id}/show`,
         method: 'get',
         headers: {
           'Accept': 'application/json',
@@ -57,7 +57,7 @@ const apiDepartment = createApi({
     deleteDepartment: builder.mutation({
       invalidatesTags: ['department'],
       query: ({ id, token }) => ({
-        url: `department/${id}/delete`,
+        url: `departments/${id}/delete`,
         method: 'delete',
         headers: {
           'Accept': 'application/json',

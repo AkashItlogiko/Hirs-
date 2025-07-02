@@ -3,17 +3,6 @@ import { useNavigate } from "react-router-dom";
 import apiDepartment from "../api/Departmentslice"; // <-- make sure this slice exists
 import { toast } from "react-toastify";
 
-/**
- * Department
- * -----------------------------------------------------------------------------
- * Reusable list component for departments with:
- *  • server‑side pagination (page + perPage)
- *  • search by department_name
- *  • delete / update actions
- *  • button to navigate to a creation form
- *
- * @param {string} propToken – optional auth token if not stored in localStorage
- */
 const Department = ({ token: propToken }) => {
   const navigate = useNavigate();
 
@@ -23,7 +12,9 @@ const Department = ({ token: propToken }) => {
 
   const token = propToken || localStorage.getItem("token");
 
-  const { data: apiDepartments, isFetching } = apiDepartment.useListQuery({
+  const [deleteDepartment] = apiDepartment.useDeleteDepartmentMutation();
+
+  const { data: apiDepartments} = apiDepartment.useListQuery({
     params: {
       page: currentPage,
       per_page: perPage,
@@ -31,7 +22,7 @@ const Department = ({ token: propToken }) => {
     },
     token,
   });
-  const [deleteDepartment] = apiDepartment.useDeleteDepartmentMutation();
+ 
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this department?")) {
@@ -87,7 +78,7 @@ const Department = ({ token: propToken }) => {
               {apiDepartments?.data?.data?.map((department) => (
                 <tr key={department.id} className="hover:bg-gray-100">
                   <td className="px-6 py-3 border-b text-gray-600">{department.id}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{department.department_name}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{department.name}</td>
                   <td className="px-6 py-3 border-b text-gray-600 space-x-2">
                     <button
                       onClick={() => navigate(`/departmentupdateform/${department.id}`)}
