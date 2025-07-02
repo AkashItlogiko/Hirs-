@@ -105,7 +105,7 @@ const AllEmployees = ({ token: propToken }) => {
                     {employee.designation}
                   </td>
                   <td className="px-6 py-3 border-b text-gray-600">
-                    {employee.department}
+                    {employee.department.name}
                   </td>
                   <td className="px-6 py-3 border-b text-gray-600">
                     {employee.email}

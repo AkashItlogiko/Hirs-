@@ -1,44 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import apiSalary from "../api/Salaryslice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import apiDepartment from "../api/Departmentslice";
+import apiEmployee from "../api/Employeeslice";
+
 const SalaryCreateForm = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const[storeSalary, {error }] = apiSalary.useStoreSalaryMutation();
-   
+  const [storeSalary] = apiSalary.useStoreSalaryMutation();
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+
+  const { data: departments, isLoading: isDepartmentsLoading } = apiDepartment.useListQuery({
+    params: { page: 1, perPage: 100 },
+    token,
+  });
+
+  const { data: apiEmployees } = apiEmployee.useListQuery(
+    {
+      params: {
+        page: 1,
+        per_page: 100,
+        department_id: selectedDepartment,
+      },
+      token,
+    },
+    { skip: !selectedDepartment }
+  );
 
   const initialValues = {
-    id_card_no: "",
-    employee_name: "",
-    designation: "",
-    department: "",
+    employee_id: "",
+    department_id: "",
     pay_date: "",
     net_salary: "",
   };
 
   const validationSchema = Yup.object({
-    id_card_no: Yup.string().required("ID No is required"),
-    employee_name: Yup.string().max(255).required("Name is required"),
-    designation: Yup.string().max(255).required("Designation is required"),
-    department: Yup.string().max(255).required("Department is required"),
-    net_salary: Yup.string().required("Net Salary is required").min(0, "Net Salary must be a positive number"),
+    employee_id: Yup.string().required("Employee is required"),
+    department_id: Yup.string().required("Department is required"),
+    net_salary: Yup.string()
+      .required("Net Salary is required")
+      .matches(/^\d+$/, "Net Salary must be a positive number"),
     pay_date: Yup.date().required("Pay Date is required"),
   });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       const result = await storeSalary({ data: { ...values }, token });
-      if(result?.data){
+      if (result?.data) {
         toast.success("Salary details saved successfully!");
         resetForm();
         navigate("/salary");
-      }else{
+      } else {
         throw new Error("Unexpected error");
       }
-     
     } catch (error) {
       console.error("Error saving salary details:", error);
       toast.error("Failed to save salary details.");
@@ -53,75 +70,64 @@ const SalaryCreateForm = () => {
         <h2 className="text-2xl font-bold text-gray-700 mb-6 text-center">
           Create Salary Details
         </h2>
+
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Id No
-                    </label>
-                    <Field
-                      type="text"
-                      name="id_card_no"
-                      placeholder="Enter ID No"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                  {/* Department Dropdown */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Department</label>
+                    {isDepartmentsLoading ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <Field
+                        as="select"
+                        name="department_id"
+                        className="w-full px-4 py-2 border rounded-md"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setFieldValue("department_id", value);
+                          setSelectedDepartment(value);
+                        }}
+                      >
+                        <option value="">Select Department</option>
+                        {departments?.data?.data?.map((dept) => (
+                          <option key={dept.id} value={dept.id}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </Field>
+                    )}
                     <ErrorMessage
-                      name="id_card_no"
+                      name="department_id"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Employee Name
-                    </label>
+
+                  {/* Employee Dropdown */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Employee</label>
                     <Field
-                      type="text"
-                      name="employee_name"
-                      placeholder="Enter Name"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                      as="select"
+                      name="employee_id"
+                      className="w-full px-4 py-2 border rounded-md"
+                    >
+                      <option value="">Select Employee</option>
+                      {apiEmployees?.data?.data?.map((employee) => (
+                        <option key={employee.id} value={employee.id}>
+                          {employee.employee_name}
+                        </option>
+                      ))}
+                    </Field>
                     <ErrorMessage
-                      name="employee_name"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Designation
-                    </label>
-                    <Field
-                      type="text"
-                      name="designation"
-                      placeholder="Enter Designation"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <ErrorMessage
-                      name="designation"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Department
-                    </label>
-                    <Field
-                      type="text"
-                      name="department"
-                      placeholder="Enter Department"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <ErrorMessage
-                      name="department"
+                      name="employee_id"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -129,15 +135,14 @@ const SalaryCreateForm = () => {
                 </div>
 
                 <div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Net Salary
-                    </label>
+                  {/* Net Salary */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Net Salary</label>
                     <Field
                       type="text"
                       name="net_salary"
                       placeholder="Enter Net Salary"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 border rounded-md"
                     />
                     <ErrorMessage
                       name="net_salary"
@@ -145,14 +150,14 @@ const SalaryCreateForm = () => {
                       className="text-red-500 text-sm mt-1"
                     />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">
-                      Pay Date
-                    </label>
+
+                  {/* Pay Date */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Pay Date</label>
                     <Field
                       type="date"
                       name="pay_date"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-4 py-2 border rounded-md"
                     />
                     <ErrorMessage
                       name="pay_date"
@@ -163,17 +168,16 @@ const SalaryCreateForm = () => {
                 </div>
               </div>
 
+              {/* Submit Button */}
               <div className="flex justify-center mt-6">
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className={`w-full px-4 py-2 text-white rounded-md shadow ${
-                    isSubmitting ? "bg-gray-500"
-                      : "bg-blue-600 hover:bg-blue-700"
+                    isSubmitting ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
                   }`}
                 >
-                  {isSubmitting ? "Submitting..."
-                    : "Save Salary Details"}
+                  {isSubmitting ? "Submitting..." : "Save Salary Details"}
                 </button>
               </div>
             </Form>

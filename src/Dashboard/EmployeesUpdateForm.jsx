@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { toast } from "react-toastify"; 
 import { useNavigate, useParams } from "react-router-dom"; 
 import apiEmployee from "../api/Employeeslice";
+import apiDepartment from "../api/Departmentslice";
 
 
 const EmployeeUpdateForm = () => {
@@ -13,13 +14,21 @@ const EmployeeUpdateForm = () => {
   const [updateEmployee, { error }] = apiEmployee.useUpdateEmployeeMutation();
   const { data: employee, isLoading: employeeLoading } = apiEmployee.useShowEmployeeQuery({id,token});  
 
+    const { data: departments, isLoading: isDepartmentsLoading }= apiDepartment.useListQuery({
+      params: {
+        page: 1,
+        perPage: 100,
+      },
+      token,
+    }); 
+
   console.log("Employee data:", employee);
 
   const initialValues = {
     id_card_number: employee?.data?.id_card_number,
     employee_name: employee?.data?.employee_name,
     designation: employee?.data?.designation,
-    department: employee?.data?.department,
+    department_id: employee?.data?.department_id,
     email: employee?.data?.email,
     phone_number: employee?.data?.phone_number,
     address: employee?.data?.address,
@@ -29,7 +38,7 @@ const EmployeeUpdateForm = () => {
     id_card_number: Yup.string().max(255).required("ID is required"),
     employee_name: Yup.string().max(255).required("Name is required"),
     designation: Yup.string().required("Position is required"),
-    department: Yup.string().required("Department is required"),
+    department_id: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email format").required("Email is required").max(255),
     phone_number: Yup.string().required("Phone number is required").max(14),
     address: Yup.string().required("Address is required").max(255),
@@ -114,12 +123,18 @@ const EmployeeUpdateForm = () => {
                   </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Department</label>
-                    <Field
-                      type="text"
-                      name="department"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Department"
-                    />
+                     <Field
+                        as="select"
+                        name="department_id"
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                      >
+                        <option value="">Select Department</option>
+                        {departments?.data?.data?.map((dept) => (
+                          <option key={dept?.id} value={dept?.id}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </Field>
                     <ErrorMessage
                       name="department"
                       component="div"

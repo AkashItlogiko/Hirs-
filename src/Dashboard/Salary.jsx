@@ -22,6 +22,8 @@ const Salary = ({token:propToken}) => {
     token,
   });
 
+  console.log('salaries:', salaries);
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this salary record?")) {
       try {
@@ -78,7 +80,7 @@ const Salary = ({token:propToken}) => {
                   <td className="px-6 py-3 border-b text-gray-600">{salary.id_card_no}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.employee_name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.designation}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{salary.department}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary.department?.name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.net_salary}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.pay_date}</td>
                   <td className="px-6 py-3 border-b flex space-x-2">

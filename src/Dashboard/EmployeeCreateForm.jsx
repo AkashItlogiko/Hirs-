@@ -1,20 +1,29 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify"; 
-import { useNavigate } from "react-router-dom"; 
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import apiEmployee from "../api/Employeeslice";
+import apiDepartment from "../api/Departmentslice";
 
 const EmployeeCreateForm = () => {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [storeEmployee, { error }] = apiEmployee.useStoreEmployeeMutation();
+
+  const { data: departments, isLoading: isDepartmentsLoading }= apiDepartment.useListQuery({
+    params: {
+      page: 1,
+      perPage: 100,
+    },
+    token,
+  }); 
 
   const initialValues = {
     id_card_number: "",
     employee_name: "",
     designation: "",
-    department: "",
+    department_id: "",
     email: "",
     phone_number: "",
     address: "",
@@ -24,7 +33,7 @@ const EmployeeCreateForm = () => {
     id_card_number: Yup.string().max(255).required("ID is required"),
     employee_name: Yup.string().max(255).required("Name is required"),
     designation: Yup.string().required("Position is required"),
-    department: Yup.string().required("Department is required"),
+    department_id: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email format").required("Email is required").max(255),
     phone_number: Yup.string().required("Phone number is required").max(14),
     address: Yup.string().required("Address is required").max(255),
@@ -34,15 +43,15 @@ const EmployeeCreateForm = () => {
     try {
       const result = await storeEmployee({ data: { ...values }, token });
       if (result?.data) {
-        toast.success("Employee created successfully!");  
+        toast.success("Employee created successfully!");
         resetForm();
-        navigate("/employees"); 
+        navigate("/employees");
       } else {
         throw new Error("Unexpected error");
       }
     } catch (error) {
       console.error("Error creating employee:", error);
-      toast.error("Failed to create employee.");  
+      toast.error("Failed to create employee.");
     } finally {
       setSubmitting(false);
     }
@@ -105,12 +114,21 @@ const EmployeeCreateForm = () => {
                   </div>
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Department</label>
-                    <Field
-                      type="text"
-                      name="department"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Department"
-                    />
+                    {isDepartmentsLoading ? <p>Loading ...</p> : (
+                      <Field
+                        as="select"
+                        name="department_id"
+                        className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                      >
+                        <option value="">Select Department</option>
+                        {departments?.data?.data?.map((dept) => (
+                          <option key={dept?.id} value={dept?.id}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </Field>
+                    )}
+                    
                     <ErrorMessage
                       name="department"
                       component="div"
