@@ -14,7 +14,7 @@ const Department = ({ token: propToken }) => {
 
   const [deleteDepartment] = apiDepartment.useDeleteDepartmentMutation();
 
-  const { data: apiDepartments} = apiDepartment.useListQuery({
+  const { data: apiDepartments,isFetching} = apiDepartment.useListQuery({
     params: {
       page: currentPage,
       per_page: perPage,
