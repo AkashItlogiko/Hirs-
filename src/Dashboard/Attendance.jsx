@@ -87,9 +87,7 @@ const Attendance = ({token:propToken}) => {
                         ? "text-green-600"
                         : record.status === "absent"
                         ? "text-red-600"
-                        : "text-yellow-500"
-                         
-                        
+                        : "text-yellow-500"                                      
                     }`}
                   >
                     {record.status}
