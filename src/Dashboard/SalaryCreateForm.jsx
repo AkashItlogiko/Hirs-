@@ -113,7 +113,7 @@ const SalaryCreateForm = () => {
 
                   {/* Employee Dropdown */}
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Employee</label>
+                    <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
                     <Field
                       as="select"
                       name="employee_id"
