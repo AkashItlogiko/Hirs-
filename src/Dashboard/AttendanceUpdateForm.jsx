@@ -4,41 +4,34 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import apiAttendance from "../api/Attendanceslice";
+
 const AttendanceUpdateForm = () => {
-  const {id} =useParams();
-  const navigate=useNavigate();
-  const token = localStorage.getItem("token");  
-  const [updateAttendance,{error}]=apiAttendance.useUpdateAttendanceMutation(); 
-  const { data: attendance, isLoading: attendanceLoading } = apiAttendance.useShowAttendanceQuery({ id, token });
-  
-  console.log("Attendance data:", attendance);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const [updateAttendance] = apiAttendance.useUpdateAttendanceMutation();
+  const { data: attendance, isLoading } = apiAttendance.useShowAttendanceQuery({ id, token });
 
   const initialValues = {
-    id_card_no: attendance?.data?.id_card_no ,
-    employee_name: attendance?.data?.employee_name ,
-    department: attendance?.data?.department ,
-    designation: attendance?.data?.designation ,
-    date: attendance?.data?.date ,
-    status: attendance?.data?.status ,
+    date: attendance?.data?.date || "",
+    status: attendance?.data?.status || "",
   };
 
   const validationSchema = Yup.object({
-    id_card_no: Yup.string().max(255).required("ID No is required"),
-    employee_name: Yup.string().max(255).required("Employee Name is required"),
-    designation: Yup.string().max(255).required("Designation is required"),
-    department: Yup.string().max(255).required("Department is required"),
     date: Yup.date().required("Date is required"),
-    status: Yup.string().oneOf(["present", "absent"],"Status must be 'Present' or 'Absent").required("Status is required"),
+    status: Yup.string()
+      .oneOf(["present", "absent", "on_leave"], "Status must be Present, Absent or On Leave")
+      .required("Status is required"),
   });
 
-  const handleSubmit = async(values, { setSubmitting, resetForm }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const result =await updateAttendance({ id, data: { ...values }, token });
-      if(result?.data){
+      const result = await updateAttendance({ id, data: values, token });
+      if (result?.data) {
         toast.success("Attendance updated successfully!");
-         resetForm();
-         navigate("/attendance");
-      }else{
+        navigate("/attendance");
+      } else {
         throw new Error("Unexpected error");
       }
     } catch (error) {
@@ -48,91 +41,48 @@ const AttendanceUpdateForm = () => {
       setSubmitting(false);
     }
   };
-  
-  if(attendanceLoading) {
+
+  if (isLoading) {
     return <div>Loading attendance data...</div>;
   }
 
   return (
     <div className="bg-gray-700 min-h-screen w-full flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Update Attendance</h2>
         <Formik
+          enableReinitialize
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
           {({ isSubmitting }) => (
             <Form>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">ID No</label>
-                    <Field
-                      type="text"
-                      name="id_card_no"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter ID No"
-                    />
-                    <ErrorMessage name="id_card_no" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
-                    <Field
-                      type="text"
-                      name="employee_name"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Employee Name"
-                    />
-                    <ErrorMessage name="employee_name" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Designation</label>
-                    <Field
-                      type="text"
-                      name="designation"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Designation"
-                    />
-                    <ErrorMessage name="designation" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
-                </div>
-                <div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Department</label>
-                    <Field
-                      type="text"
-                      name="department"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Department"
-                    />
-                    <ErrorMessage name="department" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Date</label>
-                    <Field
-                      type="date"
-                      name="date"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                    />
-                    <ErrorMessage name="date" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Status</label>
-                    <Field
-                      as="select"
-                      name="status"
-                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                    >
-                      <option value="">Select Status</option>
-                      <option value="present">Present</option>
-                      <option value="absent">Absent</option>
-                    </Field>
-                    <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
-                  </div>
-                </div>
+              <div className="mb-6">
+                <label className="block text-gray-700 font-medium mb-2">Date</label>
+                <Field
+                  type="date"
+                  name="date"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                />
+                <ErrorMessage name="date" component="div" className="text-red-500 text-sm mt-1" />
               </div>
-               
+
+              <div className="mb-6">
+                <label className="block text-gray-700 font-medium mb-2">Status</label>
+                <Field
+                  as="select"
+                  name="status"
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                >
+                  <option value="">*Select Status</option>
+                  <option value="present">Present</option>
+                  <option value="absent">Absent</option>
+                  <option value="on_leave">On Leave</option>
+                </Field>
+                <ErrorMessage name="status" component="div" className="text-red-500 text-sm mt-1" />
+              </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
