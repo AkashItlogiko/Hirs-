@@ -77,8 +77,8 @@ const Salary = ({token:propToken}) => {
             <tbody>
               {salaries?.data?.data?.map((salary) => (
                 <tr key={salary.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{salary.employee.id_card_number}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{salary.employee.employee_name}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary?.employee?.id_card_number}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{salary?.employee?.employee_name}</td>
                   {/* <td className="px-6 py-3 border-b text-gray-600">{salary.employee.designation}</td> */}
                   <td className="px-6 py-3 border-b text-gray-600">{salary.department?.name}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{salary.net_salary}</td>

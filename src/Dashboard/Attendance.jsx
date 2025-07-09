@@ -76,8 +76,8 @@ const Attendance = ({token:propToken}) => {
             <tbody>
               {attendance?.data?.data?.map((record) => (
                 <tr key={record.id} className="hover:bg-gray-100">
-                  <td className="px-6 py-3 border-b text-gray-600">{record.employee.id_card_number}</td>
-                  <td className="px-6 py-3 border-b text-gray-600">{record.employee.employee_name}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{record?.employee?.id_card_number}</td>
+                  <td className="px-6 py-3 border-b text-gray-600">{record?.employee?.employee_name}</td>
                   {/* <td className="px-6 py-3 border-b text-gray-600">{record.designation}</td>
                   <td className="px-6 py-3 border-b text-gray-600">{record.department}</td> */}
                   <td className="px-6 py-3 border-b text-gray-600">{record.date}</td>
