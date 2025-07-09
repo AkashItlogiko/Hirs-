@@ -1,6 +1,6 @@
 import { MdGroups2 } from "react-icons/md";
 import { IoHandRightSharp } from "react-icons/io5";
-import { IoMdLogOut } from "react-icons/io";
+// import { IoMdLogOut } from "react-icons/io";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import apiEmployee from "../api/Employeeslice";
 import apiSalary from "../api/Salaryslice";
