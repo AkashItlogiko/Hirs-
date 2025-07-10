@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import apiAttendance from '../api/Attendanceslice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import apiAttendance from '../api/Attendanceslice';
 
 const AttendanceReport = () => {
   const { id: userIdCardNo } = useParams();
@@ -13,11 +14,21 @@ const AttendanceReport = () => {
   const [filteredYear, setFilteredYear] = useState('');
   const [filteredMonth, setFilteredMonth] = useState('');
   const [shouldFetch, setShouldFetch] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(5); 
+  const [recordsPerPage] = useState(5);
 
   const token = localStorage.getItem('token');
+
+  const validationSchema = Yup.object({
+    year: Yup.number()
+      .required('Year is required')
+      .min(1900, 'Year must be at least 1900')
+      .max(new Date().getFullYear() + 5, 'Year is too far in the future'),
+    month: Yup.number()
+      .required('Month is required')
+      .min(1, 'Month must be between 1 and 12')
+      .max(12, 'Month must be between 1 and 12'),
+  });
 
   const handleSubmit = (values) => {
     setYear(values.year);
@@ -25,15 +36,15 @@ const AttendanceReport = () => {
     setFilteredYear(values.year);
     setFilteredMonth(values.month);
     setShouldFetch(true);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const { data: attendance, isFetching } = apiAttendance.useEmployeeAttendanceQuery(
     shouldFetch
       ? {
-          token: token,
+          token,
           params: {
-            id_card_no: userIdCardNo,
+            employee_id: userIdCardNo,
             month,
             year,
           },
@@ -51,11 +62,9 @@ const AttendanceReport = () => {
 
   const generateDates = (year, month) => {
     const daysInMonth = new Date(year, month, 0).getDate();
-    const dates = [];
-    for (let day = 1; day <= daysInMonth; day++) {
-      dates.push(`${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
-    }
-    return dates;
+    return Array.from({ length: daysInMonth }, (_, i) =>
+      `${year}-${String(month).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`
+    );
   };
 
   const filteredAttendance = attendanceData.filter((item) => {
@@ -68,23 +77,6 @@ const AttendanceReport = () => {
     const record = filteredAttendance.find((item) => item.date.startsWith(date));
     return { date, status: record ? record.status : 'No Record' };
   });
-
-  const validate = (values) => {
-    const errors = {};
-    if (!values.year) {
-      errors.year = 'Required';
-    } else if (!/^\d{4}$/.test(values.year)) {
-      errors.year = 'Year must be 4 digits';
-    }
-
-    if (!values.month) {
-      errors.month = 'Required';
-    } else if (isNaN(values.month) || values.month < 1 || values.month > 12) {
-      errors.month = 'Month must be between 1 and 12';
-    }
-
-    return errors;
-  };
 
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -106,7 +98,11 @@ const AttendanceReport = () => {
       </header>
 
       <section className="flex-grow max-w-7xl mx-auto p-6 w-full">
-        <Formik initialValues={{ month: '', year: '' }} onSubmit={handleSubmit} validate={validate}>
+        <Formik
+          initialValues={{ month: '', year: '' }}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
           {() => (
             <Form className="flex flex-wrap items-center gap-6 mb-10 justify-center bg-white p-6 rounded-lg shadow-md">
               <label className="flex flex-col text-gray-700 font-medium w-40">
@@ -178,8 +174,9 @@ const AttendanceReport = () => {
                             ? 'text-green-600 font-semibold'
                             : record.status === 'absent'
                             ? 'text-red-600 font-semibold'
-                            : record.status ==='on_leave' ? "text-yellow-500"
-                            :" "
+                            : record.status === 'on_leave'
+                            ? 'text-yellow-500'
+                            : ''
                         }`}
                       >
                         {record.status}

@@ -106,7 +106,7 @@ const Attendance = ({token:propToken}) => {
                       Delete
                     </button>
                       <button
-                        onClick={() => navigate(`/attendancereport/${record.id_card_no}`)}
+                        onClick={() => navigate(`/attendancereport/${record?.employee?.id}`)}
                         className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                       >
                         View Report
