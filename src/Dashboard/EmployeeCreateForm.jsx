@@ -41,7 +41,6 @@ const EmployeeCreateForm = () => {
     department_id: Yup.string().required("Department is required"),
     email: Yup.string().email("Invalid email format").required("Email is required").max(255),
     phone_number: Yup.string().required("Phone number is required").max(14),
-    address: Yup.string().required("Address is required").max(255),
     profile_photo: Yup.mixed().required("Profile photo is required"),
     joining_date: Yup.date().required("Joining date is required"),
     present_address: Yup.string().required("Present address is required"),
