@@ -77,7 +77,7 @@ function Sidebar({openSidebarToggle, OpenSidebar}) {
             </li>
             <li className='sidebar-list-item'>
                 <Link onClick={handleLogout}>
-                    <IoMdLogOut className='icon'/> LogOut
+                    <IoMdLogOut className='icon'/> Log Out
                 </Link>
             </li>
         </ul>
