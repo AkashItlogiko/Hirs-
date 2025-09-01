@@ -13,7 +13,7 @@ const apiEmployee = createApi({
         method: 'get',
         params: params,
         headers: {
-          // 'Accept': 'application/json',
+          
           Authorization: `Bearer ${token}`,
         },
       }),

@@ -19,6 +19,7 @@ import Attendancereport from "./Dashboard/Attendancereport";
 import Department from "./Dashboard/Department";
 import DepartmentCreateForm from "./Dashboard/DepartmentCreateForm";
 import DepartmentUpdateForm from "./Dashboard/DepartmentUpdateForm";
+import Employeeinfo from "./Dashboard/Employeeinfo";
 
 function App() {
 
@@ -59,6 +60,10 @@ function App() {
         {
           path: "/employeeform",
           element: <EmployeeCreateForm />
+        },
+        {
+          path: "/employeeinfo",
+          element: <Employeeinfo />
         },
         {
           path: "/department",
