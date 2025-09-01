@@ -19,13 +19,12 @@ const EmployeeCreateForm = () => {
   // Initial values
   const initialValues = {
     id_card_number: "",
-    nid_number: "",       // ✅ New field
+    nid_number: "",        
     employee_name: "",
     designation: "",
     department_id: "",
     email: "",
     phone_number: "",
-    address: "",
     profile_photo: "",
     joining_date: "",
     present_address: "",
@@ -46,15 +45,16 @@ const EmployeeCreateForm = () => {
     present_address: Yup.string().required("Present address is required"),
     permanent_address: Yup.string().required("Permanent address is required"),
   });
+ 
+        const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+        const formData = new FormData();
+        console.log(formData);
 
-  // Submit handler
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      const formData = new FormData();
-      Object.keys(values).forEach((key) => {
-        formData.append(key, values[key]);
-      });
-
+        Object.entries(values).forEach(([key, value]) =>                       
+          formData.append(key, value),
+        );   
+    
       const result = await storeEmployee({ data: formData, token });
       if (result?.data) {
         toast.success("Employee created successfully!");
@@ -92,7 +92,7 @@ const EmployeeCreateForm = () => {
                     <ErrorMessage name="id_card_number" component="div" className="text-red-500 text-sm mt-1"/>
                   </div>
 
-                  {/* NID Number ✅ */}
+                  
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">NID No</label>
                     <Field

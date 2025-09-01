@@ -1,133 +1,157 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify"; 
-import { useNavigate, useParams } from "react-router-dom"; 
+import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
 import apiEmployee from "../api/Employeeslice";
 import apiDepartment from "../api/Departmentslice";
 
-
 const EmployeeUpdateForm = () => {
-  const {id}  = useParams();
-  const navigate = useNavigate();  
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
+
   const [updateEmployee, { error }] = apiEmployee.useUpdateEmployeeMutation();
-  const { data: employee, isLoading: employeeLoading } = apiEmployee.useShowEmployeeQuery({id,token});  
 
-    const { data: departments, isLoading: isDepartmentsLoading }= apiDepartment.useListQuery({
-      params: {
-        page: 1,
-        perPage: 100,
-      },
-      token,
-    }); 
+  const { data: employee, isLoading: employeeLoading } = apiEmployee.useShowEmployeeQuery({ id, token });
+console.log(employee);
 
-  console.log("Employee data:", employee);
-
-  const initialValues = {
-    id_card_number: employee?.data?.id_card_number,
-    employee_name: employee?.data?.employee_name,
-    designation: employee?.data?.designation,
-    department_id: employee?.data?.department_id,
-    email: employee?.data?.email,
-    phone_number: employee?.data?.phone_number,
-    address: employee?.data?.address,
-  };
-
-  const validationSchema = Yup.object({
-    id_card_number: Yup.string().max(255).required("ID is required"),
-    employee_name: Yup.string().max(255).required("Name is required"),
-    designation: Yup.string().required("Position is required"),
-    department_id: Yup.string().required("Department is required"),
-    email: Yup.string().email("Invalid email format").required("Email is required").max(255),
-    phone_number: Yup.string().required("Phone number is required").max(14),
-    address: Yup.string().required("Address is required").max(255),
+  const { data: departments, isLoading: isDepartmentsLoading } = apiDepartment.useListQuery({
+    params: { page: 1, perPage: 100 },
+    token,
   });
-
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      const result = await updateEmployee({id, data: { ...values }, token });
-      if (result?.data) {
-        toast.success("Employee updated successfully!");  
-        resetForm();
-        navigate("/employees"); 
-      } else {
-        throw new Error("Unexpected error");
-      }
-    } catch (error) {
-      console.error("Error updating employee:", error);
-      toast.error("Failed to update employee.");  
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   if (employeeLoading) {
     return <div>Loading employee data...</div>;
   }
 
+  // Initial values
+  const initialValues = {
+    id_card_number: employee?.data?.id_card_number || "",
+    nid_number: employee?.data?.nid_number || "",
+    employee_name: employee?.data?.employee_name || "",
+    designation: employee?.data?.designation || "",
+    department_id: employee?.data?.department_id || "",
+    email: employee?.data?.email || "",
+    phone_number: employee?.data?.phone_number || "",
+    profile_photo: employee?.data?.profile_photo || "",
+    joining_date: employee?.data?.joining_date || "",
+    present_address: employee?.data?.present_address || "",
+    permanent_address: employee?.data?.permanent_address || "",
+  };
+
+  // Validation
+  const validationSchema = Yup.object({
+    id_card_number: Yup.string().max(255).required("ID is required"),
+    nid_number: Yup.string().max(20).required("NID No is required"),
+    employee_name: Yup.string().max(255).required("Name is required"),
+    designation: Yup.string().required("Position is required"),
+    department_id: Yup.string().required("Department is required"),
+    email: Yup.string().email("Invalid email format").required("Email is required").max(255),
+    phone_number: Yup.string().required("Phone number is required").max(14),
+    profile_photo: Yup.mixed().nullable(),
+    joining_date: Yup.date().required("Joining date is required"),
+    present_address: Yup.string().required("Present address is required"),
+    permanent_address: Yup.string().required("Permanent address is required"),
+  });
+
+  const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const formData = new FormData();
+
+      Object.entries(values).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          formData.append(key, value);
+        }
+      });
+
+      console.log("Data", formData);
+
+      formData.append("_method", "put");
+
+      const result = await updateEmployee({ id, data: formData, token });
+
+      if (result?.data) {
+        toast.success("Employee updated successfully!");
+        navigate("/employees");
+      } else {
+        throw new Error("Unexpected error");
+      }
+    } catch (error) {
+      console.error("Error updating employee:", error);
+      toast.error("Failed to update employee.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div className="bg-gray-700 min-h-screen w-full flex items-center justify-center">
+    <div className="bg-gray-700 min-h-10vh w-full flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl">
         <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Update Employee</h2>
         <Formik
+          enableReinitialize
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, setFieldValue }) => (
             <Form>
               <div className="grid grid-cols-2 gap-4">
                 <div>
+                  {/* ID Card Number */}
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Id No</label>
+                    <label className="block text-gray-700 font-medium mb-2">ID Card No</label>
                     <Field
                       type="text"
                       name="id_card_number"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter ID"
                     />
-                    <ErrorMessage
-                      name="id_card_number"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="id_card_number" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
+
+                  {/* NID Number */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">NID No</label>
+                    <Field
+                      type="text"
+                      name="nid_number"
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                    />
+                    <ErrorMessage name="nid_number" component="div" className="text-red-500 text-sm mt-1" />
+                  </div>
+
+                  {/* Employee Name */}
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Employee Name</label>
                     <Field
                       type="text"
                       name="employee_name"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Name"
                     />
-                    <ErrorMessage
-                      name="employee_name"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="employee_name" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
+
+                  {/* Designation */}
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Designation</label>
                     <Field
                       type="text"
                       name="designation"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Designation"
                     />
-                    <ErrorMessage
-                      name="designation"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="designation" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
+
+                  {/* Department */}
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Department</label>
-                     <Field
-                        as="select"
-                        name="department_id"
-                        className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      >
+                    {isDepartmentsLoading ? (
+                      <p>Loading...</p>
+                    ) : (
+                      <Field as="select" name="department_id" className="w-full px-4 py-2 border rounded-md focus:outline-none">
                         <option value="">Select Department</option>
                         {departments?.data?.data?.map((dept) => (
                           <option key={dept?.id} value={dept?.id}>
@@ -135,58 +159,79 @@ const EmployeeUpdateForm = () => {
                           </option>
                         ))}
                       </Field>
-                    <ErrorMessage
-                      name="department"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    )}
+                    <ErrorMessage name="department_id" component="div" className="text-red-500 text-sm mt-1" />
+                  </div>
+
+                  {/* Joining Date */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Joining Date</label>
+                    <Field type="date" name="joining_date" className="w-full px-4 py-2 border rounded-md focus:outline-none" />
+                    <ErrorMessage name="joining_date" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                 </div>
+
                 <div>
+                  {/* Email */}
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Email</label>
                     <Field
                       type="email"
                       name="email"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Email"
                     />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
+
+                  {/* Phone */}
                   <div className="mb-6">
                     <label className="block text-gray-700 font-medium mb-2">Phone Number</label>
                     <Field
                       type="text"
                       name="phone_number"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Phone Number"
                     />
-                    <ErrorMessage
-                      name="phone_number"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                    <ErrorMessage name="phone_number" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
+
+                  {/* Profile Photo */}
                   <div className="mb-6">
-                    <label className="block text-gray-700 font-medium mb-2">Address</label>
+                    <label className="block text-gray-700 font-medium mb-2">Profile Photo</label>
+                    <img src={`http://127.0.0.1:8000/employees/${employee?.data?.profile_photo}`} alt="Employee Image" />
+
+                    <input
+                      type="file"
+                      name="profile_photo"
+                      onChange={(event) => setFieldValue("profile_photo", event.currentTarget.files[0])}
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
+                    />
+                    <ErrorMessage name="profile_photo" component="div" className="text-red-500 text-sm mt-1" />
+                  </div>
+
+                  {/* Present Address */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Present Address</label>
                     <Field
                       type="text"
-                      name="address"
+                      name="present_address"
                       className="w-full px-4 py-2 border rounded-md focus:outline-none"
-                      placeholder="Enter Address"
                     />
-                    <ErrorMessage
-                      name="address"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
+                    <ErrorMessage name="present_address" component="div" className="text-red-500 text-sm mt-1" />
+                  </div>
+
+                  {/* Permanent Address */}
+                  <div className="mb-6">
+                    <label className="block text-gray-700 font-medium mb-2">Permanent Address</label>
+                    <Field
+                      type="text"
+                      name="permanent_address"
+                      className="w-full px-4 py-2 border rounded-md focus:outline-none"
                     />
+                    <ErrorMessage name="permanent_address" component="div" className="text-red-500 text-sm mt-1" />
                   </div>
                 </div>
               </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}

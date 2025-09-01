@@ -72,21 +72,21 @@ const AllEmployees = ({ token: propToken }) => {
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Employee Name
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                {/* <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Designation
-                </th>
+                </th> */}
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Department
                 </th>
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                {/* <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Phone Number
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
+                </th> */}
+                {/* <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Address
-                </th>
+                </th> */}
                 <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
                   Actions
                 </th>
@@ -101,22 +101,31 @@ const AllEmployees = ({ token: propToken }) => {
                   <td className="px-6 py-3 border-b text-gray-600">
                     {employee.employee_name}
                   </td>
-                  <td className="px-6 py-3 border-b text-gray-600">
+                  {/* <td className="px-6 py-3 border-b text-gray-600">
                     {employee.designation}
-                  </td>
+                  </td> */}
                   <td className="px-6 py-3 border-b text-gray-600">
                     {employee.department.name}
                   </td>
                   <td className="px-6 py-3 border-b text-gray-600">
                     {employee.email}
                   </td>
-                  <td className="px-6 py-3 border-b text-gray-600">
+                  {/* <td className="px-6 py-3 border-b text-gray-600">
                     {employee.phone_number}
-                  </td>
-                  <td className="px-6 py-3 border-b text-gray-600">
-                    {employee.address}
-                  </td>
-                  <td className="px-6 py-3 border-b text-gray-600 flex space-x-2">
+                  </td> */}
+                  {/* <td className="px-6 py-3 border-b text-gray-600">
+                    {employee. present_address}
+                  </td> */}
+                 
+                  
+
+               <td className="px-6 py-3 border-b text-gray-600 flex space-x-2">
+                    <button
+                      onClick={() => navigate(`/employeeinfo/${employee.id}`)}
+                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                    >
+                      Info
+                    </button>
                     <button
                       onClick={() => navigate(`/employeeupdateform/${employee.id}`)}
                       className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
@@ -130,6 +139,7 @@ const AllEmployees = ({ token: propToken }) => {
                       Delete
                     </button>
                   </td>
+
                 </tr>
               ))}
               {apiEmployees?.data?.data?.length === 0 && (

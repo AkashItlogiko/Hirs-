@@ -24,7 +24,7 @@ const apiEmployee = createApi({
       query: ({ data, token }) => ({
         url: 'employee/create',
         method: 'post',
-        body: { ...data },
+        body: data,
         headers: {
           'Accept': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ const apiEmployee = createApi({
   query: ({ id, data, token }) => ({
     url: `employee/${id}/update`,
     method: 'put',
-    body: { ...data },
+    body: data,
     headers: {
       'Accept': 'application/json',
       Authorization: `Bearer ${token}`,
